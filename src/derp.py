@@ -128,8 +128,9 @@ class Console (wx.Frame):
                              pointSize=12, style=wx.FONTSTYLE_NORMAL,
                              weight=wx.FONTWEIGHT_NORMAL))
         self.UpdateLog(text)
-        self.control.SetBackgroundColour("black")
-        self.control.SetForegroundColour("green")
+#	Green's not working for mac, so comment out for now.
+#        self.control.SetBackgroundColour("black")
+#        self.control.SetForegroundColour("green")
 
     def UpdateLog(self, text):
         self.control.SetValue(text)
