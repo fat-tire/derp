@@ -558,18 +558,17 @@ class Script():
         self.DoSubProcess(command + scriptArgs)
 
     def UpdateTools(self):
-        import shutil
 
         # copy udev rules file if it doesn't exist already
         # (but the directory for it does)
-        if  platform.system() == "Linux" and os.path.isdir(udevRules[0]) \
-            and not self.debug:
+        if platform.system() == "Linux" and os.path.isdir(udevRules[0]):
             if not os.path.isfile(udevRules[0] + udevRules[1]):
                 self.ScriptLog("Copying udev file:  " + udevRules[1] + \
                                " to " + udevRules[0])
-                shutil.copyfile(os.path.dirname(os.path.realpath(__file__)) + \
-                                "/../" + udevRules[1], + udevRules[0] + \
-                                udevRules[1])
+                self.DoSubProcess(["cp", os.path.dirname( \
+                                os.path.realpath(__file__)) + \
+                                "/../" + udevRules[1], udevRules[0] + \
+                                udevRules[1]])
 
         self.ScriptLog("ACTION  : Updating SDK Tools...")
         self.ScriptLog(" " * 10 + "Checking for SDK...")
