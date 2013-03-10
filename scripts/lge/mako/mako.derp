@@ -1,0 +1,169 @@
+<?xml version="1.0" ?>
+<derp device_codename="mako" os="Linux Darwin" device_name="Nexus 4" device_vendor="lge" app_version="0.001" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" title="CM10.1-M1 for Mako" license="GPLv2">
+	
+	<section name="Introduction">
+		<step name="The Nexus 4">
+			<info>
+<font size="+4">Plug your device into your computer via USB cable now.  Make sure you have adequate storage space on your computer (say, 500MB to be safe).</font><p/>
+			The Nexus 4 (''mako'') is the fourth Nexus phone manufactured by LG in cooperation with Google.<p/>
+			This installer will assist you in replacing the Nexus 4's built-in "stock" Android with CyanogenMod.
+<p/>
+<b>Note: DISCLAIMER</b>
+<i>Modifying or replacing your device's software may void your device's warranty, lead to data loss, hair loss, financial loss, privacy loss, security breaches, or other damage, and therefore must be done entirely at your own risk. No one affiliated with the CyanogenMod  project or this installation program is responsible for your actions. Good luck!</i>
+<br/><img src="http://wiki.cyanogenmod.org/images/1/15/Cid-wink.png" align="bottom"/><img HEIGHT="100" WIDTH="50" ALIGN="bottom"
+				src="http://wiki.cyanogenmod.org/images/thumb/a/a6/Mako.png/150px-Mako.png"/>
+		<p/>
+		</info>
+		</step>   
+	</section>
+
+        <section name="Unlock the device">
+		<step name = "Warning">
+		<info><h3>Unlocking the bootloader on a Nexus device will automatically wipe all user data.</h3>
+		<p/>
+		Okay, you read the warning.
+		<p/>  So before we begin, you will need to manually enable a feature called "USB debugging" on the device.  To do this, boot
+		your Nexus 4 into the stock operating system, connect it to your computer's USB port via a USB cable, and once the device is booted, press <b>Continue</b> below.
+		</info>
+		</step>
+		<step name="Enable Developer Settings">
+		<info>
+		<p/>
+		To enable the Developer settings menu, go to the <b>Settings</b>, then <b>About Phone</b> (at the bottom).  Then, scroll to the bottom
+		of the list and tap the <b>Build number</b> item seven (7) times until you are notified that "You are now a developer."
+If you are told "No need, you have already enabled developer settings", then the developer settings are already unhidden.  Either way, go back to the first <b>Settings</b> menu,.
+		<p/>
+		Press <b>Continue</b> below when you're back at the main <b>Settings</b> menu.
+		</info>
+		</step>
+		<step name="Enable USB debugging">
+		<info>Still in the <b>Settings</b> menu, scroll down until you see the <b>Developer options</b> item.  Select it, and then
+		ensure that the item called <b>Android debugging</b> is checked.
+		<p/>
+		Then press <b>Continue</b> below.
+		</info>
+		</step>
+		<step name="Verify your connection">
+		<action type="adb"><arg>kill-server</arg></action>
+		<action type="adb"><arg>start-server</arg></action>
+		<info>The USB connection to your device has just been restarted.
+<p/>
+ Newer stock versions of Android may now prompt you to <b>Allow USB debugging?</b>.  If this happens, you can agree to <b>always allow from this computer</b>.  (Continue to do this any time you are prompted during this installation.)</info>
+		<info>
+		<p/>Select <b>Continue</b> below.
+		</info>
+		</step>
+		<step name="Fastboot mode">
+		<action type="adb"><arg>reboot</arg><arg>bootloader</arg></action>
+ Your device should automatically restart into "fastboot" (bootloader) mode.  If it does not, you may want to investigate online why your computer is not able to connect via adb to the device and retry this installation script.
+		<info>After the device restarts, you should see a screen that
+		 says the words <font color="RED">FASTBOOT MODE</font> in small print.  You may need to look carefully to see it.
+		<p/>
+		Assuming this is the case, press <b>Continue</b> below.
+		</info>
+		</step>
+		<step name="Unlock the device">
+		<action type="fastboot"><arg>oem</arg><arg>unlock</arg></action>
+		<info>You should now see on-screen instructions on how to unlock the device.  Follow these directions.
+		<p/>
+		<b>Remember, unlocking your device will "factory wipe" everything on the phone to original settings!</b>
+		<p/>
+		When you're done, the device should reset automatically.  You will notice an unlocked "padlock" icon on the "Google" boot screen,
+		indicating that the device is unlocked and can now be flashed with a new operating system.
+		<p/><b>Note</b>:  If your device was unlocked previously, you don't need to re-unlock it.  However, the reboot won't happen automatically.  To <font color="blue">manually reboot</font>, simply instruct the bootloader to "Start" by pressing the power button.  Then select <b>Continue</b> below.
+		</info>
+		</step>
+	</section>
+
+
+	<section name="Install ClockWorkMod">
+		<step name="Download ClockworkMod Recovery">
+		<file local_name="recovery.img" url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.2.3-mako.img" md5="0892f64da3a36995819be8c3c0fe1931"/>
+		<info>
+		A recovery mode allows you to easily update and backup your device and will be used to install the new operating system.<p/>Standby while the new recovery mode is downloaded from the Internet.<p/>If there are no problems, the <b>Continue</b> button will be re-enabled below and you can proceed to the next step.
+		</info>
+		</step>
+		<step name="Reboot into fastboot mode">
+		<action type="adb"><arg>kill-server</arg></action>
+		<action type="adb"><arg>start-server</arg></action>
+		<action type="adb"><arg>reboot</arg><arg>bootloader</arg></action>
+		<info>Once again, we need to boot into fastboot mode... and it should be happening automatically.
+		<p/>
+		When you've returned to the bootloader screen, press <b>Continue</b> below to begin flashing the recovery image.
+		</info>
+		</step>
+		<step name="Install ClockworkMod...">
+		<action type="fastboot"><arg>flash</arg><arg>recovery</arg><arg>recovery.img</arg></action>
+		<info>The recovery image is being installed to the device.<p/>When it's done, the <b>Continue</b> button below will become enabled.
+		</info>
+		</step>
+		<step name="Reboot">
+		<info>Now that the recovery has been flashed, you need to <font color="blue">manually re-"Start"</font> by pressing the power button.  Then select <b>Continue</b> below when you are done.</info>
+		<info>The device should then reboot into the clockwork recovery.
+		<p/>
+		When it's fully rebooted into the recovery mode, press <b>Continue</b> below.
+		</info>
+		<action type="adb"><arg>kill-server</arg></action>
+		<action type="adb"><arg>start-server</arg></action>
+		<action type="adb"><arg>reboot</arg><arg>recovery</arg></action>
+		</step>
+	</section>
+
+	<section name="Install CyanogenMod">
+		<step name="Download CyanogenMod">
+		<file 	url="http://get.cm/get/jenkins/21750/cm-10.1-20130305-NIGHTLY-mako.zip"
+			md5="88a6762c40227368e31905bcae0f30c1"
+			local_name="cm-10.1-20130305-NIGHTLY-mako.zip"/>
+		<info>
+		The installer is now downloading a recent "milestone" version of CyanogenMod from the Internet.  .<p/><i>Tip!  Once the new operating system is up and running, you can update to a newer (though possibly less stable) "nightly" version by going to the <b>Settings</b>, choosing <b>About phone</b> and then selecting the <b>CyanogenMod updates</b> option.</i>
+
+		<p/>If there are no problems with the download, the <b>Continue</b> button below will be re-enabled when the download finishes and is verified. After you select <b>Continue</b>, CyanogenMod will be automatically copied to your device and installed.  Again, please make sure the device is still connected to the computer.
+		</info>
+		</step>
+		<step name="The Final Steps!">
+		<info>CyanogenMod is now being pushed to the phone from your computer.  When it's done, the phone will shut off,
+		and it should be automatically installed by the recovery image.  Then the phone should restart into CyanogenMod.
+		<p/>
+		Thanks for using the installer.  Hope it worked out.  You can now quit this program, and enjoy CyanogenMod!
+		</info>
+			<!-- Note the use of the wfd="skip" attribute.  This is because clockworkmod doesn't respond
+                             to the adb wait-for-device command, so we explicitly say "don't use it"-->
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+ 			   	<arg>mount</arg>
+				<arg>/data</arg>
+			</action>
+			<action type="adb" wfd="skip">
+				<arg>shell</arg>
+				<arg>mkdir -p /data/media/derp/</arg>
+			</action>
+			<action type="adb" wfd="skip">
+				<arg>push</arg>
+				<arg>cm-10.1-20130305-NIGHTLY-mako.zip</arg>
+				<arg>/data/media/derp/</arg>
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+				<arg>mkdir -p /cache/recovery/</arg>
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+ 			   	<arg>echo "boot-recovery" >  /cache/recovery/command</arg>
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+ 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130305-NIGHTLY-mako.zip" >> /cache/recovery/command</arg>
+			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+ 				<arg>sync</arg>
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>reboot</arg>
+ 			   	<arg>recovery</arg>
+			</action>
+              </step>
+	</section>
+</derp>
+

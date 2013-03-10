@@ -1,0 +1,317 @@
+<?xml version="1.0" ?>
+<derp app_version="0.001" os="Linux Darwin" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" license="GPL" title="How To Create Scripts" >
+<section name = "Introduction"><step name="Get Derpy!">
+<info>So you want to write a Derp installation script?  It's easier than you might think.  Derp isn't too complicated-- it doesn't have a lot of "logic".  It just follows a script and does what you tell it.
+<p/>
+To start a script file, just get out any text editor (or XML editor) and name it something with the .derp file extension, such as:
+<p/>
+<b>sample.derp</b>
+<p/>
+Once you write up a sample script, you can load the file with Derp to see if it works.
+<p/><b>If you don't want it to actually run the "action" commands you embed into it, ensure "Debug Mode" is checked in the menu above.</b>
+<p/>
+Let's start!</info>
+</step>
+</section>
+<section name='The "derp" tag'>
+<step name="Starting a Script">
+<info>Every script starts with the &lt;derp&gt; tag and ends with the &lt;/derp&gt; tag.  Within the "&lt;derp&gt;" tag, at least for this pre-alpha version, you need to put at least one required attribute, <b>app_version</b>:
+<p/>
+<tt><font color="blue">&lt;derp app_version="0.001"&gt;<br/>
+&lt;/derp&gt;</font></tt>
+<p/>
+This is to identify the version of Derp that your script is for.  Future versions may not support your script.  You can put other attributes that might be used in the future:
+<p/>
+<tt><font color="blue">&lt;derp device_codename="mako" os="Linux Darwin" title="CM10.1-M1 for Mako" device_name="Nexus 4" device_vendor="lge" app_version="0.001" script_version=".5" author = "fattire" author_email="fattire@example.com" author_twitter="@fat__tire" license="GPLv2"&gt;</font></tt>
+<p/>
+These additional tags may be supported in future versions of Derp, so if you want to use 'em, it's recommended.  They'll be ignored if they're not needed.
+<p/>The <b>title="CM10.1-M1 for Mako"</b> is a general title for the script.  VERY briefly explain what it does.  It's not required, but recommended.
+<p/>The one other important attribute, <b>os="Linux Darwin"</b>, will be explained later.  For now, just know that it is optional, but you can use it to restrict the whole script to only run only in certain operating systems. 
+</info>
+</step>
+</section>
+<section name='The "section" tag'>
+<step name="Main Sections">
+<info>
+Every set of instructions should be divided into logical <b>sections</b>, such as the ones on the left.  The section has its own required attribute, the <b>name</b>:
+<p/>
+<tt><font color="blue">&lt;derp app_version="0.001" os="Linux Darwin" script_version=".5"&gt;<br/>
+	&lt;section name="<font color="green">This is the first section</font>"&gt;&lt;/section&gt;<br/>
+&lt;/derp&gt;</font></tt>
+
+<p/>
+Notice the <b>name</b> attribute is used with a section to identify what the section is for.
+<p/>
+There's not much more to say about sections.  It's easy.  Let's move on.
+</info>
+</step>
+</section>
+<section name='The "step" tag'>
+<step name="Sections Are Made of Steps">
+<info>
+Each Section can be made of (at least one but) an unlimited number of individual <b>steps</b>.  And the tag for that is called &lt;step&gt;.  Here's how it's used:
+<p/>
+<tt><font color="blue">&lt;derp app_version="0.001" script_version=".5"&gt;<br/>
+	&lt;section name="<font color="green">This is the first section</font>"&gt;<br/>
+	&lt;step name="<font color="green">This is step one</font>"&gt;&lt;/step&gt;<br/>
+	&lt;step name="<font color="green">This is step two</font>"&gt;&lt;/step&gt;<br/>
+	&lt;/section&gt;<br/>
+	&lt;section name="<font color="green">This is the second section</font>"&gt;<br/>
+	&lt;step name="<font color="green">This is step three</font>"&gt;&lt;/step&gt;<br/>
+	&lt;step name="<font color="green">This is step four</font>"&gt;&lt;/step&gt;<br/>
+	&lt;/section&gt;<br/>
+&lt;/derp&gt;</font></tt>
+<p/>
+Notice that steps, like sections, need to have a designated <b>name</b> attribute so that Derp knows what to display.  The step name will appear to the user at the top on the right as the centered step heading.
+</info>
+</step>
+</section>
+<section name='The "info" tag'>
+<step name="Showing Info To The User">
+<info>
+The stuff that appears in the main info area (such as the words you're reading now), should be wrapped in <b>info</b> tags.
+<p/>
+Example:
+<p/>
+<tt><font color="blue">&lt;derp app_version="0.001" script_version=".5"&gt;<br/>
+	&lt;section name="<font color="green">This is the first section</font>"&gt;<br/>
+	&lt;step name="<font color="green">This is step one</font>"&gt;<br/>
+	&lt;info&gt;<font color="green">This is the text you'll see!  It explains what's going on to the user.  &lt;b&gt;I'm bolding this part because it's really important for the user to see.&lt;/b&gt;</font>&lt;/info&gt;<br/>
+	&lt;/step&gt;<br/>
+	&lt;/section&gt;<br/>
+&lt;/derp&gt;</font></tt>
+<p/>
+<b>Note: </b>The stuff that you put between the &lt;info&gt; and &lt;/info&gt; tags is...HTML!<p/>So you can format it however you want.  You can even include images from the Internet.
+
+<p/>Here is the list of HTML tags that are recognized:
+<p/><font color="blue"><tt>
+A               NAME=[string]<br/>
+                HREF=[url]<br/>
+                TARGET=[target window spec]<br/>
+ADDRESS<br/>
+AREA            SHAPE=POLY<br/>
+                SHAPE=CIRCLE<br/>
+                SHAPE=RECT<br/>
+                COORDS=[coords]<br/>
+                HREF=[url]<br/>
+B<br/>
+BIG<br/>
+BLOCKQUOTE<br/>
+BODY            TEXT=[color]<br/>
+                LINK=[color]<br/>
+                BGCOLOR=[color]<br/>
+BR              ALIGN=[alignment]<br/>
+CENTER<br/>
+CITE<br/>
+CODE<br/>
+DD<br/>
+DIV             ALIGN=[alignment]<br/>
+DL<br/>
+DT<br/>
+EM<br/>
+FONT            COLOR=[color]<br/>
+                SIZE=[fontsize]<br/>
+                FACE=[comma-separated list of facenames]<br/>
+HR              ALIGN=[alignment]<br/>
+                SIZE=[pixels]<br/>
+                WIDTH=[percent|pixels]<br/>
+                NOSHADE<br/>
+H1<br/>
+H2<br/>
+H3<br/>
+H4<br/>
+H5<br/>
+H6<br/>
+I<br/>
+IMG             SRC=[url]<br/>
+                WIDTH=[pixels]<br/>
+                HEIGHT=[pixels]<br/>
+                ALIGN=TEXTTOP<br/>
+                ALIGN=CENTER<br/>
+                ALIGN=ABSCENTER<br/>
+                ALIGN=BOTTOM<br/>
+                USEMAP=[url]<br/>
+KBD<br/>
+LI<br/>
+MAP             NAME=[string]<br/>
+META            HTTP-EQUIV="Content-Type"<br/>
+                CONTENT=[string]<br/>
+OL<br/>
+P               ALIGN=[alignment]<br/>
+PRE<br/>
+SAMP<br/>
+SMALL<br/>
+STRIKE<br/>
+STRONG<br/>
+SUB<br/>
+SUP<br/>
+TABLE           ALIGN=[alignment]<br/>
+                WIDTH=[percent|pixels]<br/>
+                BORDER=[pixels]<br/>
+                VALIGN=[v_alignment]<br/>
+                BGCOLOR=[color]<br/>
+                CELLSPACING=[pixels]<br/>
+                CELLPADDING=[pixels]<br/>
+TD              ALIGN=[alignment]<br/>
+                VALIGN=[v_alignment]<br/>
+                BGCOLOR=[color]<br/>
+                WIDTH=[percent|pixels]<br/>
+                COLSPAN=[pixels]<br/>
+                ROWSPAN=[pixels]<br/>
+                NOWRAP<br/>
+TH              ALIGN=[alignment]<br/>
+                VALIGN=[v_alignment]<br/>
+                BGCOLOR=[color]<br/>
+                WIDTH=[percent|pixels]<br/>
+                COLSPAN=[pixels]<br/>
+                ROWSPAN=[pixels]<br/>
+TITLE<br/>
+TR              ALIGN=[alignment]<br/>
+                VALIGN=[v_alignment]<br/>
+                BGCOLOR=[color]<br/>
+TT<br/>
+U<br/>
+UL</tt>
+</font>
+<p/>
+With just these tags, you can create a full "informational" .derp file that the user can step through and read instructions.  Perfectly good for getting them to take steps themselves.<p/>But Derp is for more than just providing info.  It's supposed to do the actual installing too.  So let's talk about two important tags, <b>&lt;file&gt;</b> and <b>&lt;action&gt;</b>...
+</info>
+</step>
+</section>
+<section name='The "file" tag'>
+<step name="Downloading Files">
+<info>
+The <b>file</b> tag defines a file by URL which is automatically downloaded to the user's computer (in Derp's download directory) when the user reaches the step that contains it.  (&lt;file&gt; tags go inside steps).<p/>If the file already exists, the md5sum is checked, and if it matches, the file is not re-downloaded.
+<p/>
+Example (I'm skipping most of the tags around it...):
+<p/>
+<tt><font color="blue">&lt;step name="<font color="green">Getting a file...</font>"&gt;<br/>
+&lt;info&gt;<font color="green">When you reach this step, a file will be automatically downloaded...</font>&lt;/info&gt;<br/>
+&lt;file url="<font color="green">http://example.com/myfile.zip</font>" local_name="<font color="green">myfile.zip</font>"  md5="<font color="green">dd43e2fc6b029be50dacb05be81e1648</font>"/&gt;<br/>
+&lt;/step&gt;<br/>
+</font></tt>
+<p/>
+The file should wind up in <font color="green"><tt>/tmp/derp/downloads/</tt></font> on a Linux machine and <font color="green"><tt>/Library/Application Support/DERP/downloads/</tt></font> on a Mac.
+<p/>
+<b>Don't forget that derp runs as root, so these files will have an administrator as owner.  If you don't want these files to stick around, you will have to delete them when the script is done running (see the "bash" action type in the next section).</b>  (However, if this is a file that you may want to use in the future, you may not want to delete it...)
+</info>
+</step>
+</section>
+<section name='The "action" tag'>
+<step name="Making Derp Scripts Do Things">
+<info>
+So last but not least, this is the most powerful and useful of the Derp tags: <b>action</b>.  It can probably best be explained through examples:
+<p/>
+<tt><font color="blue">
+&lt;step name="Rebooting your device"&gt;<br/>
+&lt;info&gt;<font color="green">Now rebooting your device into the bootloader...</font>&lt;/info&gt;<br/>
+&lt;action type="<font color="green">adb</font>"&gt;<br/>
+&lt;arg&gt;<font color="green">reboot</font>&lt;/arg&gt;<br/>
+&lt;arg&gt;<font color="green">bootloader</font>&lt;/arg&gt;<br/>
+&lt;/action&gt;<br/>
+&lt;/step&gt;<br/></font></tt>
+<p/>
+or...
+<p/>
+<tt><font color="blue">&lt;step name="<font color="green">Install CyanogenMod</font>"&gt;<br/>
+&lt;info&gt;<font color="green">Now flashing...</font>&lt;/info&gt;<br/>
+&lt;action type="<font color="green">fastboot</font>"&gt;<br/>
+&lt;arg&gt;<font color="green">flash</font>&lt;/arg&gt;<br/>
+&lt;arg&gt;<font color="green">system</font>&lt;/arg&gt;<br/>
+&lt;arg&gt;<font color="green">system.img</font>&lt;/arg&gt;<br/>
+&lt;/action&gt;<br/>
+&lt;/step&gt;<br/>
+</font></tt>
+<p/>
+or...
+<p/>
+<tt><font color="blue">
+			&lt;action type="<font color="green">adb</font>"&gt;<br/>
+ 			   	&lt;arg&gt;<font color="green">shell</font>&lt;/arg&gt;<br/>
+ 			   	&lt;arg&gt;<font color="green">su</font>&lt;/arg&gt;<br/>
+				&lt;arg&gt;<font color="green">-c</font>&lt;/arg&gt;<br/>
+				&lt;arg&gt;<font color="green">mkdir -p /cache/recovery/</font>&lt;/arg&gt;<br/>
+&lt;/action&gt;
+</font></tt>
+<p/>
+This example assumes that a root shell is available on the device.
+<p/>
+Valid types of actions currently are "<font color="green">adb</font>", "<font color="green">fastboot</font>",
+ "<font color="green">bash</font>", and "<font color="green">updatetools</font>".  The "current" directory for all action items is the download folder.  Meaning, for example, that if you just downloaded "filename.zip" with the &lt;file&gt; tag, you should be able to <b>adb push filename.zip /sdcard/</b> without specifying the directory.
+<p/>
+The "adb" action type normally includes an "adb wait-for-device" command automatically before the command is executed, just as a 'sanity check' to ensure that the device is actually connected.  However, <b>some versions of clockworkmod do not respond to the "wait-for-device" adb command</b>.  You can elect to opt-out of this automatic check by adding an attribute that looks like this: <b>wfd="skip"</b> to the &lt;action&gt; tag.  That attribute says: don't use "adb wait-for-device" before issuing the command.
+<p/>
+Other things to notice:
+<p/><ul>
+<li><b>type="updatetools"</b> -- run this whenever you want to install or update fastboot and adb.  This is done automatically when the user runs derp (before they can select any .derp scripts), so it's probably never necessary.</li><br/>
+<li><b>type="fastboot"</b> -- separate all arguments to fastboot with the &lt;arg&gt; tag.  The location of fastboot is known automatically and it should hopefully run in all supported operating systems.  Make sure you've prepared the user by telling them in a previous step to plug in their device and put it in fastboot mode before you run any fastboot commands (or they won't work.)</li><br/>
+<li><b>type="adb"</b> -- separate all arguments to adb with the &lt;arg&gt; tag.  Similar to adb, don't worry about how it is invoked.  Just be sure to be as informative to the user as possible (tell them to plug in the device in advance, for example, and make sure they've enabled adb on the device and approved the RSA key if necessary.  <b>type="adb"</b> runs "adb wait-for-device" as a double-check before issuing a command just to make sure the device is actually there.</li><br/>
+<li><b>type="bash"</b> -- This will run (<b>as root!</b>) the bash script which you put between the  &lt;action&gt; and  &lt;action&gt; tags.</li>
+</ul><p/>
+Example of a bash script:
+<p/>
+<tt><font color="blue">&lt;step name="<font color="green">Install CyanogenMod</font>"&gt;<br/>
+&lt;info&gt;<font color="green">Creating and copying a file.</font>&lt;/info&gt;<br/>
+&lt;action type="<font color="green">bash</font>" os="<font color="green">Linux Darwin</font>"&gt;<br/><font color="green"><tt>
+# --- THIS IS A BASH SCRIPT!<br/>
+mkdir -p /tmp/derp/<br/>
+echo "this should be written to samplefile" > /tmp/derp/samplefile<br/>
+cp /tmp/derp/samplefile /tmp/derp/newfile<br/>
+# --- END OF BASH SCRIPT<br/>
+</tt></font>&lt;/action&gt;<br/>
+</font></tt>
+<p/>
+<b>Again, when your script invokes a bash script, do not forget you are running as root! <font color="red">With bash scripts, be sure to explicitly specify EVERY directory for files you are writing, adding, or removing so that you do not accidentally overwrite the wrong thing.</font></b>  Running bash scripts as root is extremely powerful/dangerous so test your
+scripts very carefully. Also, <b>be sure to specify the operating system for all bash scripts</b> (see next section for how to do this)
+so that your scripts will be forward-compatible with operating systems that may not support bash.
+<p/> More types of actions will come if people think they're necessary.
+<p/>Remember you can stop the actions from actually being executed by turning on <b>Debug Mode</b>
+<p/><b>As with file downloading, don't forget that you are running as root so you may wish to clean up any files you create as they
+will have been created by the root user.</b>
+<p/>That's it.  You're now a Derp master.  Except... one more thing...
+<p/>
+</info>
+</step>
+</section>
+<section name="The os attribute">
+<step name="Controlling by Operating System">
+<info>
+On any of the tags, you can add <b>os="something"</b>, where "something" can be <b>"Darwin"</b> or <b>"Linux"</b>.  This will (hopefully) make the tag apply ONLY to the specified operating system.<p/>So for example:
+<p/>
+<tt><font color="blue">&lt;info os="<font color="green">Linux</font>"&gt;<font color="green">This will only be seen when run in Linux</font>&lt;/info&gt;<br/>
+&lt;info os="<font color="green">Darwin</font>"&gt;T<font color="green">his will be seen by OS X users only</font>.&lt;/info&gt;<br/>
+&lt;info&gt;<font color="green">This will be seen when run on all operating systems</font>&lt;/info&gt;</font></tt>
+<p/>
+Because in the future derp may run in Windows (if someone ports it), and because bash scripts may not be supported in Windows, you may want to explicitly include the <b>os</b> attribute for any action tag that is running a bash script.  In fact, it's probably best, if you're using bash scripts, to make your script "opt in" for those OSes you support by adding <b>os="Linux Darwin"</b> to the original &lt;derp&gt; tag.
+<p/>
+You may have therefore noticed that you can include more than one OS, as in:
+<p/>
+<tt><font color="blue">&lt;info os="<font color="green">Linux Darwin</font>"&gt;<font color="green">This will be seen in both Linux and OS X, but not Windows, if a Windows version of Derp ever exists.</font>&lt;/info&gt;</font></tt>
+<p/>
+To ensure that your script will ONLY be ever run on Linux and Mac, you can add <b>os="Linux Darwin"</b> to the &lt;derp&gt; tag.
+</info></step>
+</section>
+<section name="Final Thoughts">
+<step name="Last But Not Least...">
+<info>The Derp Installer is still a work in progress, but hopefully it will be useful for some users.  If not, oh well.
+<p/>
+Here are some parting thoughts in putting together your steps.
+<p/>
+<ul>
+<li>It's probably a good idea to start every Derp script with a step that is simply informational-- tell the user what the script does with as much detail as you think is necessary.  Be sure to list all requirements so they're not caught off guard halfway through the process.</li>
+<li>It may be smart to put all the &lt;file&gt; tags at the beginning of your script.  That way, if the files are not available online for some reason, the user won't get stuck halfway through an install.  In other words, make sure you have all the files you need.</li>
+<li>FYI:  If for some reason a file is unable to load after a few tries, the user should automatically be notified there's a problem.  The script keeps going though after they acknowledge the problem, so if you want them to abandon ship at that point, make sure to tell them.</li>
+<li>Just because you have all these tags available doesn't mean you have to use them.  You could do an installation in a single &lt;step&gt; or two.  Conversely you could have an entire tutorial that is just informative or guides the users through steps without actually doing anything.</li>
+<li>If it makes things simpler, you can write scripts that are intended only for specific operating systems.  use the <b>os=</b> tag so that people don't run them on the wrong one.  The nice thing about the adb/fastboot/file tags, however, are they should work in any operating system.</li>
+<li>At present, none of the actions return any kind of "success code" to indicate if they worked or not.  If you need any kind of logic, including such feedback, either (1) contribute code to enable this for future versions of the Derp Installer, or (2) use a bash shell script.  You can have an entire .derp script that consists of a shell script.  Just be sure to test it thoroughly as you would any installation script!</li>
+<li>You can use the Debug Mode for testing your own scripts if you want to step through it without actually doing anything.</li>
+<li>Users can turn on/off the Debug Mode (from the menu) at any point to disable/enable file downloads and actions.  They can use this for skipping certain steps or whatever.</li>
+<li>Remember that all the actions in a step are executed when the step containing them is run, not before or after.</li>
+<li>And finally, derp is dumb.  Make your scripts smart.  Make them complete.  Test them.  You can make them long and multi-stepped or do everything in a single step.  It's up to you.  Just make sure that whatever you do, you consider many types of scenarios regarding the state of devices as well as the experience of the person running the script.  Your script will live or die on how well YOU write it.  Good luck!</li>
+</ul>
+<p/>
+So that's it.  Enjoy!<br/>
+</info>
+</step>
+</section>
+</derp>

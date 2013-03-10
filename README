@@ -1,0 +1,44 @@
++--------------------------------------------------------+
+|          "Device Environment Replacement Program"      |
+|                        AKA                             | 
+|                 THE DERP INSTALLER                     |
+|                  (or informally)                       |
+|                       "DERP"                           |
++--------------------------------------------------------+
+
+
+*** BECAUSE IT IS A SOFTWARE INSTALLER, DERP NEEDS TO BE RUN
+WITH ADMINISTRATOR PRIVILEGES.  IT MAY BE SAFEST TO DO THIS
+FROM A VIRTUAL MACHINE OR A COMPUTER YOU DON'T CARE ABOUT.
+BE WARY OF RUNNING UNTRUSTED SCRIPTS AS IT WILL HAVE FULL
+ACCESS TO YOUR COMPUTER AND DEVICES.  SEE THE LICENSE FOR
+DISCLAIMERS AND REMEMBER YOU RUN AT YOUR OWN RISK ***
+
+
+For right now, it's not even worth describing what DERP
+is in too much detail, as it's still new and experimental
+and potentially dangerous and you probably shouldn't use it.
+
+
+BUILDING DERP
+
+
+You'll need Python 2.7 or so and wxwidgets installed on any computer
+that you wish to build DERP.  On mac, wxwidgets 2.9 or higher is needed.
+
+Additionally you'll need a toolchain installed.  For debian, you need the
+usual .deb-making tools.
+
+More info will have to follow later.  Essentially, though.... to build:
+
+
+make debian -- makes a debian .deb for installation
+make mac    -- makes a mac .app 
+
+
+To run from the main source directory:
+
+sudo python src/derp.py
+
+
+   --fattire

@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# prerm-derp
+#
+# prepm for derp
+#
+# Author: fattire
+
+set -e
+
+clear_mime()
+{
+xdg-icon-resource uninstall --size 256 application-derp
+xdg-mime uninstall /usr/share/derp/derp-derp.xml
+}
+
+case "$1" in
+   remove|upgrade)
+   if dpkg-query -W xdg-utils; 
+       then clear_mime;
+   fi
+   ;;
+
+   *)
+
+   ;;
+esac
+
+exit 0
+

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/derp">
+    <comment>Derp script</comment>
+    <glob pattern="*.derp"/>
+  </mime-type>
+</mime-info>

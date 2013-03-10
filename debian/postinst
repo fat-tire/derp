@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# postinst-derp
+#
+# postinst for install derp
+#
+# Author: fattire
+
+set -e
+
+set_mime()
+{
+   xdg-mime install /usr/share/derp/derp-derp.xml
+   xdg-icon-resource install --size 256 --context mimetypes /usr/share/derp/res/drawables/derp.png application-derp
+}
+
+case "$1" in
+   configure)
+   if dpkg-query -W xdg-utils;
+       then set_mime;
+   fi
+   ;;
+
+   *)
+
+   ;;
+esac
+
+exit 0

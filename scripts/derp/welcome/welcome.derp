@@ -1,0 +1,59 @@
+        <derp app_version="0.001">
+            <section name="Welcome">
+                <step name="The DERP Installer">
+                    <info>The Device Environment Replacement Program (AKA the DERP Installer) is intended to help non-technical folks 
+                    replace and modify the operating system on handheld devices from a computer.<p><b>At the moment, everything is HIGHLY unstable</b>,
+                    and it's not recommended you use this application at all.
+                    </p>
+                    <p/>
+                    <table><tr><td bgcolor="yellow"><b><font color="RED">BY DESIGN, THIS PROGRAM HAS NO INHERENT SECURITY</font>.  It is a
+                    software installer, and, like most installation programs, it has FULL administrator-level
+                    access to your computer and/or your device.  A
+                    malicious script, script-installed malware, or even a software bug could conceivably
+                    cause severe, permanent damage.  Understand you assume 
+                    all risks and responsibility for any and all damage that 
+                    may occur.</b></td></tr></table>
+                    
+                    <p>Read the LICENSE, then select <b>Continue</b> below to indicate
+                    you understand and agree to the terms and conditions.</p>
+                    </info>
+                </step>
+            </section>
+            <section  name="Install/Update Tools">
+                <step name="Install/Update Tools">
+                    <info>
+                    Before you run any installation script(s), some support tools need to be installed and updated.<p/>These tools include:
+                    <p/>
+                    <ul><li><b>Fastboot</b> -- Google's utility for flashing partitions to devices
+                    and unlocking certain bootloaders</li>
+                    <p/>
+                    <li><b>adb</b> -- "Android Debug Bridge" -- a tool from Google, which
+                    has many applications and is known as the "Swiss-army knife" of Android development.</li>
+                    </ul>
+                    <p/>
+                    To install these items and/or bring them up-to-date, press <b>Continue</b> below.<p/></info>
+                </step>
+                <step name="Updating Tools...">
+                <info><b>Installing/Updating Support Tools...</b>
+                <p/>Stand by.  The files should be updated from the Internet to the tools directory at:<p/></info>
+		<info os="Linux"><font color="green"><tt>/tmp/derp/tools/</tt></font></info>
+		<info os="Darwin"><font color="green"><tt>/Library/Application Support/DERP/tools/</tt></font></info>
+		<info>
+		<p/>
+		<p/>When it's all finished, the <b>Continue</b> button below will be enabled.  Give it a few minutes, depending
+		on the speed of your Internet connection.
+                </info>
+                <action type="updatetools"/>
+                </step>
+            </section>
+            <section name="Run A Script">
+                <step name="Choose Installation Script">
+                    <info>
+                    Now choose the installation script (ending in <tt>.derp</tt>) for your device.<p/>
+                    In the <b>File</b> menu bar item above, select </info>
+                    <info os="Darwin"><b>Open Script</b>.</info>
+                    <info os="Linux"><b>Open</b>.</info>
+                    <info><p/>Enjoy!<p/><i>Note:  Derp is still new.  There will likely be a more convenient list of all devices in the future.)</i></info>
+                </step>
+            </section>
+        </derp>

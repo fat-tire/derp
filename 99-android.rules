@@ -1,0 +1,56 @@
+#Acer
+SUBSYSTEM==usb, SYSFS{idVendor}==0502, MODE=0664, GROUP=sudo
+#ASUS
+SUBSYSTEM==usb, SYSFS{idVendor}==0b05, MODE=0664, GROUP=sudo
+#Dell
+SUBSYSTEM==usb, SYSFS{idVendor}==413c, MODE=0664, GROUP=sudo
+#Foxconn
+SUBSYSTEM==usb, SYSFS{idVendor}==0489, MODE=0664, GROUP=sudo
+#Garmin-Asus
+SUBSYSTEM==usb, SYSFS{idVendor}==091e, MODE=0664, GROUP=sudo
+#Google
+SUBSYSTEM==usb, SYSFS{idVendor}==18d1, MODE=0664, GROUP=sudo
+#HTC
+SUBSYSTEM==usb, SYSFS{idVendor}==0bb4, MODE=0664, GROUP=sudo
+#Huawei
+SUBSYSTEM==usb, SYSFS{idVendor}==12d1, MODE=0664, GROUP=sudo
+#K-Touch
+SUBSYSTEM==usb, SYSFS{idVendor}==24e3, MODE=0664, GROUP=sudo
+#KT Tech
+SUBSYSTEM==usb, SYSFS{idVendor}==2116, MODE=0664, GROUP=sudo
+#Kyocera
+SUBSYSTEM==usb, SYSFS{idVendor}==0482, MODE=0664, GROUP=sudo
+#Lenevo
+SUBSYSTEM==usb, SYSFS{idVendor}==17ef, MODE=0664, GROUP=sudo
+#LG
+SUBSYSTEM==usb, SYSFS{idVendor}==1004, MODE=0664, GROUP=sudo
+#Motorola
+SUBSYSTEM==usb, SYSFS{idVendor}==22b8, MODE=0664, GROUP=sudo
+#NEC
+SUBSYSTEM==usb, SYSFS{idVendor}==0409, MODE=0664, GROUP=sudo
+#Nook
+SUBSYSTEM==usb, SYSFS{idVendor}==2080, MODE=0664, GROUP=sudo
+#Nvidia
+SUBSYSTEM==usb, SYSFS{idVendor}==0955, MODE=0664, GROUP=sudo
+#OTGV
+SUBSYSTEM==usb, SYSFS{idVendor}==2257, MODE=0664, GROUP=sudo
+#Pantech
+SUBSYSTEM==usb, SYSFS{idVendor}==10a9, MODE=0664, GROUP=sudo
+#Philips
+SUBSYSTEM==usb, SYSFS{idVendor}==0471, MODE=0664, GROUP=sudo
+#PMC-Sierra
+SUBSYSTEM==usb, SYSFS{idVendor}==04da, MODE=0664, GROUP=sudo
+#Qualcomm
+SUBSYSTEM==usb, SYSFS{idVendor}==05c6, MODE=0664, GROUP=sudo
+#SK Telesys
+SUBSYSTEM==usb, SYSFS{idVendor}==1f53, MODE=0664, GROUP=sudo
+#Samsung
+SUBSYSTEM==usb, SYSFS{idVendor}==04e8, MODE=0664, GROUP=sudo
+#Sharp
+SUBSYSTEM==usb, SYSFS{idVendor}==04dd, MODE=0664, GROUP=sudo
+#Sony Ericsson
+SUBSYSTEM==usb, SYSFS{idVendor}==0fce, MODE=0664, GROUP=sudo
+#Toshiba
+SUBSYSTEM==usb, SYSFS{idVendor}==0930, MODE=0664, GROUP=sudo
+#ZTE
+SUBSYSTEM==usb, SYSFS{idVendor}==19d2, MODE=0664, GROUP=sudo

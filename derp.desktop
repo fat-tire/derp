@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Derp
+Comment=Device Environment Replacement Program
+Exec=gksudo derp
+Icon=/usr/share/derp/res/drawables/derp.png
+Type=Application
+MimeType=application/derp

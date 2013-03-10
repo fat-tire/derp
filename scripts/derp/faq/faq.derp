@@ -1,0 +1,25 @@
+        <derp app_version="0.001" title="FAQ">
+            <section name="FAQ">
+                <step name="Frequently Asked Questions">
+			<info>
+<b><font color="blue">What does "BY DESIGN, THIS PROGRAM HAS NO INHERENT SECURITY" mean?</font></b>
+<p/>
+Because it runs as root (the administrative all-powerful user) on the computer, the Derp Installer has full access to everything the computer its running on has and can do whatever the computer can do.  This gives the installer enormous power.  Furthermore, the <i>scripts</i> that Derp runs have the same unrestricted ability to commit good or evil.
+<p/>
+<b><font color="blue">Why does it run as root?</font></b>
+<p/>
+A decision was made to require the program to run as root to give installation script writers maximum flexibility.  Derp automatically installs and updates tools such as <b>adb</b> and <b>fastboot</b>, which may need to run as root on some platforms.  Furthermore, specific devices may need system-level software installed or run as the administrator.
+<p/>
+Many software installers run as root, so this installer is no exception.  If you are concerned about security, you may wish to run Derp on a virtual machine.  And this is true of the internet generally-- <b>do not EVER run untrusted installation scripts!</b>  This applies not only to scripts for this application, but for any random installation script you are given.  These scripts can download, install, delete, etc. on your computer(s) AND your device(s).  Run at your own risk.
+<p/>
+<b><font color="blue">Why is there only a "Continue" button?  Why can't I go back?</font></b>
+<p/>
+Installation scripts are meant to be run beginning to end.  Jumping around, or even repeating steps, could lead to bad things, and the script writer probably didn't mean for that to happen.  If you have a problem mid-script, it may be best to stop and contact the author to ask for help/assistance.
+<p/>
+<b><font color="blue">Where is the Windows version?</font></b>
+<p/>
+The Derp Installer is written using wxpython and with some work can be made to run on Windows.  Developers are wanted.
+			</info>
+		</step>
+	    </section>
+         </derp>

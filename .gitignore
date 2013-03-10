@@ -1,0 +1,8 @@
+# binaries
+
+*.py[cod]
+*\~
+
+# eclipse stuff
+.project
+.pydevproject
