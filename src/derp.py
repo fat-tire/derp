@@ -59,7 +59,7 @@ elif platform.system() == "Linux":
     androidSdk = ["http://dl.google.com/android/",
                   "android-sdk_r21.1-linux.tgz",
                    "3369a439240cf3dbe165d6b4173900a8", "android-sdk-linux/"]
-    toolsFolder = "/tmp/" + app_name.lower() + "/tools/"
+    toolsFolder = "/opt/" + app_name.lower() + "/tools/"
     downloadsFolder = "/tmp/" + app_name.lower() + "/downloads/"
     udevRules = ["/etc/udev/rules.d/", "99-android.rules"]
 
@@ -604,6 +604,8 @@ class Script():
                             "--no-ui", "--filter", "platform-tool, tool"])
             self.DoSubProcess([toolsFolder + androidSdk[3] + "tools/android",
                                "update", "adb"])
+            self.DoSubProcess(["chmod", "-R", "a-w", toolsFolder])
+            self.DoSubProcess(["chmod", "-R", "a-w", downloadsFolder])
             self.DoADB(["kill-server"], True)
             self.DoADB(["start-server"], True)
             self.frame.openItem.Enable()

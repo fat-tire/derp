@@ -36,7 +36,7 @@
                 <step name="Updating Tools...">
                 <info><b>Installing/Updating Support Tools...</b>
                 <p/>Stand by.  The files should be updated from the Internet to the tools directory at:<p/></info>
-		<info os="Linux"><font color="green"><tt>/tmp/derp/tools/</tt></font></info>
+		<info os="Linux"><font color="green"><tt>/opt/derp/tools/</tt></font></info>
 		<info os="Darwin"><font color="green"><tt>/Library/Application Support/DERP/tools/</tt></font></info>
 		<info>
 		<p/>
