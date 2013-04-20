@@ -107,12 +107,14 @@ class SubProcessThread(Thread):
 class LicenseFrame (wx.Frame):
 
     def __init__(self, parent, text):
-        wx.Frame.__init__(self, parent, title="License Info", size=(900, 600))
+        dw, dh = wx.DisplaySize()
+        wx.Frame.__init__(self, parent, title="License Info", size=(int(dw *0.8), int(dh * 0.8)))
         self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.control.SetFont(wx.Font(family=wx.FONTFAMILY_TELETYPE,
                              pointSize=12, style=wx.FONTSTYLE_NORMAL,
                              weight=wx.FONTWEIGHT_NORMAL))
         self.control.SetValue(text)
+        self.Centre()
 
     def OnQuit(self, e):
         self.Destroy()
@@ -121,13 +123,15 @@ class LicenseFrame (wx.Frame):
 class Console (wx.Frame):
 
     def __init__(self, parent, title, text):
-        wx.Frame.__init__(self, parent, title="Console", size=(1024, 600))
+        dw, dh = wx.DisplaySize()
+        wx.Frame.__init__(self, parent, title="Console", size=(int(dw * 0.8), int(dh * 0.8)))
         #define the console
         self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.control.SetFont(wx.Font(family=wx.FONTFAMILY_TELETYPE,
                              pointSize=12, style=wx.FONTSTYLE_NORMAL,
                              weight=wx.FONTWEIGHT_NORMAL))
         self.UpdateLog(text)
+        self.Centre()
 #	Green's not working for mac, so comment out for now.
 #        self.control.SetBackgroundColour("black")
 #        self.control.SetForegroundColour("green")
@@ -135,6 +139,7 @@ class Console (wx.Frame):
     def UpdateLog(self, text):
         self.control.SetValue(text)
         self.LineDown()
+        self.control.ShowPosition(self.control.GetLastPosition())
 
     def OnQuit(self, e):
         self.Destroy()
@@ -143,7 +148,8 @@ class Console (wx.Frame):
 class MainWindow (wx.Frame):
 
     def __init__(self, parent, title):
-        wx.Frame.__init__(self, parent, title=title, size=(1024, 768))
+        dw, dh = wx.DisplaySize()
+        wx.Frame.__init__(self, parent, title=title, size=(int(dw * 0.8), int(dh * 0.8)))
 
         self.parent = parent
 
