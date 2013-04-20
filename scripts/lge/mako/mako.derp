@@ -18,12 +18,12 @@
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://get.cm/get/jenkins/24399/cm-10.1-20130407-NIGHTLY-mako.zip"
-                        md5="bde8097b4459a76504b76004b93daa87"
-                        local_name="cm-10.1-20130407-NIGHTLY-mako.zip"/>
+                <file   url="http://get.cm/get/jenkins/25535/cm-10.1-20130420-NIGHTLY-mako.zip"
+                        md5="fc23c5c4c6fd3c4a77c54b7cf61305aa"
+                        local_name="cm-10.1-20130420-NIGHTLY-mako.zip"/>
                 <file   local_name="recovery.img"
-                        url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.2.3-mako.img"
-                        md5="0892f64da3a36995819be8c3c0fe1931"/>
+                        url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.3.1-mako.img"
+                        md5="28156448103f241d80fb517b03144389"/>
                 <info>Standby.  Downloading all the files needed.<p/>If there is a problem, you'll be informed.  Otherwise, when the downloads are finished, <b>Continue</b>
                       will be enabled below.</info>
                 </step>
@@ -137,7 +137,7 @@
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1-20130305-NIGHTLY-mako.zip</arg>
+				<arg>cm-10.1-20130420-NIGHTLY-mako.zip</arg>
 				<arg>/data/media/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -150,7 +150,7 @@
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
- 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130305-NIGHTLY-mako.zip" >> /cache/recovery/command</arg>
+ 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130420-NIGHTLY-mako.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">
