@@ -132,9 +132,9 @@ class Console (wx.Frame):
                              weight=wx.FONTWEIGHT_NORMAL))
         self.UpdateLog(text)
         self.Centre()
-#	Green's not working for mac, so comment out for now.
-#        self.control.SetBackgroundColour("black")
-#        self.control.SetForegroundColour("green")
+#       Green's not working for mac, so comment out for now.
+#       self.control.SetBackgroundColour("black")
+#       self.control.SetForegroundColour("green")
 
     def UpdateLog(self, text):
         self.control.SetValue(text)
@@ -452,7 +452,7 @@ class Script():
 
     def ScriptLog(self, text):
         print app_name + ": " + text
-        self.log += text + "\n"
+        self.log += text.decode('utf-8') + "\n"
         if self.console:
             self.console.UpdateLog(self.log)
 
