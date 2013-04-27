@@ -9,7 +9,7 @@
 			This installer will assist you in replacing the Nexus 7's built-in "stock" Android with CyanogenMod.
 <p/>
 <b>Note: DISCLAIMER</b>
-<i>Modifying or replacing your device's software may void your device's warranty, lead to data loss, hair loss, financial loss, privacy loss, security breaches, or other damage, and therefore must be done entirely at your own risk. No one affiliated with the CyanogenMod  project or this installation program is responsible for your actions. Good luck!</i>
+<i>Modifying or replacing your device's software may void your device's warranty, lead to data loss, hair loss, financial loss, privacy loss, security breaches, or other damage, and therefore must be done entirely at your own risk. No one affiliated with the CyanogenMod  project or this installation program is responsible for your actions.  Good luck!</i>
 <br/><img src="http://wiki.cyanogenmod.org/images/1/15/Cid-wink.png" align="bottom"/><img HEIGHT="100" WIDTH="50" ALIGN="bottom"
 				src="http://wiki.cyanogenmod.org/images/c/c4/Grouper.png"/>
 		<p/>
@@ -41,7 +41,7 @@
 		<step name="Enable Developer Settings">
 		<info>
 		<p/>
-		To enable the Developer settings menu, go to the <b>Settings</b>, then <b>About Phone</b> (at the bottom).  Then, scroll to the bottom
+		To enable the Developer settings menu, go to the <b>Settings</b>, then <b>About Tablet</b> (at the bottom).  Then, scroll to the bottom
 		of the list and tap the <b>Build number</b> item seven (7) times until you are notified that "You are now a developer."
                 <p/>If you are told "No need, you have already enabled developer settings", then the developer settings are already unhidden.  Either way, go back to the first <b>Settings</b> menu,.
 		<p/>
