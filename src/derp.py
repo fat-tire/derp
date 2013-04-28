@@ -602,6 +602,8 @@ class Script():
                              "and try running Derp again.  For now, " +
                              "the script will continue.  This is just for " +
                              "your information.")
+                else:
+                    self.ScriptLog("(Next time, try running DERP with DEBUG MODE turned off.)")
                 break
         else:
             self.ScriptLog("Previous SDK found.  No need to get it again!")
