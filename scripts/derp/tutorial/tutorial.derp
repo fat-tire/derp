@@ -181,7 +181,10 @@ With just these tags, you can create a full "informational" .derp file that the 
 <section name='The "file" tag'>
 <step name="Downloading Files">
 <info>
-The <b>file</b> tag defines a file by URL which is automatically downloaded to the user's computer (in Derp's download directory) when the user reaches the step that contains it.  (&lt;file&gt; tags go inside steps).<p/>If the file already exists, the md5sum is checked, and if it matches, the file is not re-downloaded.
+The <b>file</b> tag defines a file by URL which is automatically downloaded to the user's computer
+(in Derp's download directory) when the user reaches the step that contains it.
+(&lt;file&gt; tags go inside steps).
+<p/>If the file already exists, the md5 hash is checked, and if it matches, the file is not re-downloaded.
 <p/>
 Example (I'm skipping most of the tags around it...):
 <p/>
@@ -194,7 +197,12 @@ Example (I'm skipping most of the tags around it...):
 The file should wind up in <font color="green"><tt>/tmp/derp/downloads/</tt></font> on a Linux machine and <font color="green"><tt>/Library/Application Support/DERP/downloads/</tt></font> on a Mac.
 <p/>
 <b>Don't forget that derp runs as root, so these files will have an administrator as owner.  If you don't want these files to stick around, you will have to delete them when the script is done running (see the "bash" action type in the next section).</b>  (However, if this is a file that you may want to use in the future, you may not want to delete it...)
-</info>
+<p/>
+Also-- SHA hash algorithms are also supported.  Just replace the <font color="blue"><tt>md5</tt></font> attribute with
+ <font color="blue"><tt>sha1</tt></font>, <font color="blue"><tt>sha224</tt></font>,
+<font color="blue"><tt>sha256</tt></font>, <font color="blue"><tt>sha384</tt></font>, 
+or <font color="blue"><tt>sha512</tt></font>.  You must provide one (and only one)
+hash method.</info>
 </step>
 </section>
 <section name='The "action" tag'>

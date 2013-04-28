@@ -51,14 +51,16 @@ home = os.path.expanduser("~")
 if platform.system() == "Darwin":
     androidSdk = ["http://dl.google.com/android/",
                   "android-sdk_r21.1-macosx.zip",
-                  "49903cf79e1f8e3fde54a95bd3666385", "android-sdk-macosx/"]
+                  "ac2dc476c14ae60e85bc2d889cdab0ff17992891e0ed9107e651aaa86c18a1d3ff9df81fd6bd35c01b26010484fd67a84915f157749bce7a061c7fe4b789c405",
+                  "android-sdk-macosx/"]
     toolsFolder = "/Library/Application Support/" + app_name + "/tools/"
     downloadsFolder = "/Library/Application Support/" + app_name + \
                       "/downloads/"
 elif platform.system() == "Linux":
     androidSdk = ["http://dl.google.com/android/",
                   "android-sdk_r21.1-linux.tgz",
-                   "3369a439240cf3dbe165d6b4173900a8", "android-sdk-linux/"]
+                  "160cd51f965a23120cf63abe02b9a9ce8913d1239a848bc423b33ad10eff65b30147c6b11ab751aa12154292ce0a7837aa60def1cd31a2ccb5d4fc6fcb6d2c24",
+                  "android-sdk-linux/"]
     toolsFolder = "/opt/" + app_name.lower() + "/tools/"
     downloadsFolder = "/tmp/" + app_name.lower() + "/downloads/"
     udevRules = ["/etc/udev/rules.d/", "99-android.rules"]
@@ -585,7 +587,7 @@ class Script():
                            ":  Trying to install tools.")
             self.DoSubProcess(["curl", "-sLo" + toolsFolder + androidSdk[1],
                                 androidSdk[0] + androidSdk[1]])
-            if self.VerifyMD5(toolsFolder + androidSdk[1], androidSdk[2]):
+            if self.VerifyHash(toolsFolder + androidSdk[1], androidSdk[2], "sha512"):
                 self.DoSubProcess(["tar", "-C" + toolsFolder, "-xvf" +
                                    toolsFolder + androidSdk[1]])
             attempt += 1
@@ -616,28 +618,63 @@ class Script():
             self.DoADB(["start-server"], True)
             self.frame.openItem.Enable()
 
-    def VerifyMD5(self, filename, md5):
+    def VerifyHash(self, filename, hash, algorithm):
         import hashlib
         try:
             f = open(filename, 'r')
             content = f.read()
-            h = hashlib.md5(content)
+            if algorithm.lower() == "md5":
+                 h = hashlib.md5(content)
+            elif algorithm.lower() == "sha1":
+                 h = hashlib.sha1(content)
+            elif algorithm.lower() == "sha224":
+                 h = hashlib.sha224(content)
+            elif algorithm.lower() == "sha256":
+                 h = hashlib.sha256(content)
+            elif algorithm.lower() == "sha384":
+                 h = hashlib.sha384(content)
+            elif algorithm.lower() == "sha512":
+                 h = hashlib.sha512(content)
         except:
-            self.ScriptLog("Error reading file for MD5 verification.")
+            self.ScriptLog("Error reading file for " + algorithm + \
+                 " hash verification.")
             return False
-        if h.hexdigest() == md5:
-            self.ScriptLog("MD5 checks out.")
+        if h.hexdigest() == hash:
+            self.ScriptLog(algorithm + " hash checks out for " + filename + ".")
             return True
         else:
-            self.ScriptLog("MD5 Failure!")
+            self.ScriptLog(algorithm + " failure for " + filename + "!  File needs to be (re)downloaded.")
+            self.ScriptLog("Expected hash : " + hash)
+            self.ScriptLog("Actual hash   : " + h.hexdigest())
             return False
 
     def GetFile(self, filetag):
         success = False
         self.frame.nextBtn.Disable()
-        # check md5 first, just in case it's already there.
-        if self.VerifyMD5(downloadsFolder + filetag.get("local_name"),
-                           filetag.get("md5")):
+        # check hash first, just in case the file is already there.
+        if filetag.get("md5") != "":
+            hash = filetag.get("md5")
+            algorithm = "md5"
+        elif filetag.get("sha1") != "":
+            hash = filetag.get("sha1")
+            algorithm = "sha1"
+        elif filetag.get("sha224") != "":
+            hash = filetag.get("sha224")
+            algorithm = "sha224"
+        elif filetag.get("sha256") != "":
+            hash = filetag.get("sha256")
+            algorithm = "sha256"
+        elif filetag.get("sha384") != "":
+            hash = filetag.get("sha384")
+            algorithm = "sha384"
+        elif filetag.get("sha512") != "":
+            hash = filetag.get("sha512")
+            algorithm = "sha512"
+        else:
+            self.ScriptLog("ERROR:  <File> tag does not contain a valid hash.")
+
+        if self.VerifyHash(downloadsFolder + filetag.get("local_name"),
+                           hash, algorithm):
             success = True
         else:
             attempt = 1
@@ -646,8 +683,8 @@ class Script():
                                    filetag.get("local_name"),
                                    filetag.get("url")])
                 attempt += 1
-                if self.VerifyMD5(downloadsFolder + filetag.get("local_name"),
-                                  filetag.get("md5")):
+                if self.VerifyHash(downloadsFolder + filetag.get("local_name"),
+                                  hash, algorithm):
                     success = True
                     break
                 elif attempt == 5 and not self.debug:
