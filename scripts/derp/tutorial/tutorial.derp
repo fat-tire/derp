@@ -254,8 +254,20 @@ Other things to notice:
 <li><b>type="updatetools"</b> -- run this whenever you want to install or update fastboot and adb.  This is done automatically when the user runs derp (before they can select any .derp scripts), so it's probably never necessary.</li><br/>
 <li><b>type="fastboot"</b> -- separate all arguments to fastboot with the &lt;arg&gt; tag.  The location of fastboot is known automatically and it should hopefully run in all supported operating systems.  Make sure you've prepared the user by telling them in a previous step to plug in their device and put it in fastboot mode before you run any fastboot commands (or they won't work.)</li><br/>
 <li><b>type="adb"</b> -- separate all arguments to adb with the &lt;arg&gt; tag.  Similar to adb, don't worry about how it is invoked.  Just be sure to be as informative to the user as possible (tell them to plug in the device in advance, for example, and make sure they've enabled adb on the device and approved the RSA key if necessary.  <b>type="adb"</b> runs "adb wait-for-device" as a double-check before issuing a command just to make sure the device is actually there.</li><br/>
+<li><b>type="python"</b> -- This will run (<b>as root!</b>) the python script which you put between the  &lt;action&gt; and  &lt;action&gt; tags.  If you add <b>external="true"</b> the python script will run as a standalone process (as if typed from the command line).  Without <b>external="true"</b>, it will run inline (using the python <b>exec</b> command, and you will have access to all the internal variables derp uses.</li><br/>
 <li><b>type="bash"</b> -- This will run (<b>as root!</b>) the bash script which you put between the  &lt;action&gt; and  &lt;action&gt; tags.</li>
 </ul><p/>
+Example of a python script:
+<p/>
+<tt><font color="blue">&lt;step name="<font color="green">Pop up a dialog!</font>"&gt;<br/>
+&lt;info&gt;<font color="green">This should pop up a dialog box using python.</font>&lt;/info&gt;<br/>
+&lt;action type="<font color="green">python</font>"<br/><font color="green"><tt>
+self.frame.Notify("Popup worked")<br/>
+self.ScriptLog("Popup worked")<br/>
+</tt></font>&lt;/action&gt;<br/>
+</font>
+<font color="blue">&lt;/step&gt;</font></tt>
+<p/>
 Example of a bash script:
 <p/>
 <tt><font color="blue">&lt;step name="<font color="green">Install CyanogenMod</font>"&gt;<br/>
@@ -267,10 +279,13 @@ echo "this should be written to samplefile" > /tmp/derp/samplefile<br/>
 cp /tmp/derp/samplefile /tmp/derp/newfile<br/>
 # --- END OF BASH SCRIPT<br/>
 </tt></font>&lt;/action&gt;<br/>
-</font></tt>
+</font>
+<font color="blue">&lt;/step&gt;</font></tt>
 <p/>
-<b>Again, when your script invokes a bash script, do not forget you are running as root! <font color="red">With bash scripts, be sure to explicitly specify EVERY directory for files you are writing, adding, or removing so that you do not accidentally overwrite the wrong thing.</font></b>  Running bash scripts as root is extremely powerful/dangerous so test your
-scripts very carefully. Also, <b>be sure to specify the operating system for all bash scripts</b> (see next section for how to do this)
+<b>Again, when your script invokes a bash or python script, do not forget you are running as root! <font color="red">With bash/python scripts,
+be sure to explicitly specify EVERY directory for files you are writing, adding, or removing so that you do not accidentally overwrite the wrong thing.</font>
+</b>Running bash and python scripts as root is extremely/especially powerful/dangerous so test your
+scripts very carefully.<p/>Also, <b>be sure to specify the operating system for all bash scripts</b> (see next section for how to do this)
 so that your scripts will be forward-compatible with operating systems that may not support bash.
 <p/> More types of actions will come if people think they're necessary.
 <p/>Remember you can stop the actions from actually being executed by turning on <b>Debug Mode</b>

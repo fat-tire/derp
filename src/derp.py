@@ -66,6 +66,7 @@ elif platform.system() == "Linux":
     udevRules = ["/etc/udev/rules.d/", "99-android.rules"]
 
 bash = "/bin/bash"
+python = sys.executable
 
 licenseFile = os.path.dirname(os.path.realpath(__file__)) + "/../LICENSE"
 welcomeScript = scriptFolder + "derp/welcome/welcome.derp"
@@ -546,12 +547,25 @@ class Script():
             self.DoFastboot(args)
         elif action.get("type") == "bash":
             self.DoBash(action.text)
+        elif action.get("type") == "python":
+            external = action.get("external") == "true"
+            self.DoPython(action.text, external)
         self.frame.nextBtn.SetFocus()
 
     def DoBash(self, script):
         script = script.rstrip('\n')
         command = [bash, "-c"]
         self.DoSubProcess(command + [script])
+
+    def DoPython(self, script, external):
+        if external:
+             command = [python, "-c"]
+             self.DoSubProcess(command + [script])
+        elif not self.debug:
+             self.ScriptLog("Executing Python code: \n" + script)
+             exec(script)
+        else:
+             self.ScriptLog("DEBUG MODE:  Scripted Python code not executed.")
 
     def DoADB(self, scriptArgs, wfdSkip):
         command = [toolsFolder + androidSdk[3] + "platform-tools/adb"]
