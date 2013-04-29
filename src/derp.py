@@ -653,7 +653,7 @@ class Script():
                  h = hashlib.sha512(content)
         except:
             self.ScriptLog("Error reading file for " + algorithm + \
-                 " hash verification.")
+                 " hash verification. (Does it exist?)")
             return False
         if h.hexdigest() == hash:
             self.ScriptLog(algorithm + " hash checks out for " + filename + ".")
@@ -668,24 +668,24 @@ class Script():
         success = False
         self.frame.nextBtn.Disable()
         # check hash first, just in case the file is already there.
-        if filetag.get("md5") != "":
-            hash = filetag.get("md5")
-            algorithm = "md5"
-        elif filetag.get("sha1") != "":
-            hash = filetag.get("sha1")
-            algorithm = "sha1"
-        elif filetag.get("sha224") != "":
-            hash = filetag.get("sha224")
-            algorithm = "sha224"
-        elif filetag.get("sha256") != "":
-            hash = filetag.get("sha256")
-            algorithm = "sha256"
-        elif filetag.get("sha384") != "":
-            hash = filetag.get("sha384")
-            algorithm = "sha384"
-        elif filetag.get("sha512") != "":
+        if "sha512" in filetag.attrib:
             hash = filetag.get("sha512")
             algorithm = "sha512"
+        elif "sha384" in filetag.attrib:
+            hash = filetag.get("sha384")
+            algorithm = "sha384"
+        elif "sha256" in filetag.attrib:
+            hash = filetag.get("sha256")
+            algorithm = "sha256"
+        elif "sha224" in filetag.attrib:
+            hash = filetag.get("sha224")
+            algorithm = "sha224"
+        elif "sha1" in filetag.attrib:
+            hash = filetag.get("sha1")
+            algorithm = "sha1"
+        elif "md5" in filetag.attrib:
+            hash = filetag.get("md5")
+            algorithm = "md5"
         else:
             self.ScriptLog("ERROR:  <File> tag does not contain a valid hash.")
 
