@@ -1,0 +1,222 @@
+<?xml version="1.0" ?>
+<derp device_codename="m7" os="Linux Darwin" device_name="HTC One" device_vendor="htc" app_version="0.001" script_version=".5" author = "cowmix" author_email="mmarch@gmail.com" author_twitter="@cowmix" title="CM10.1 for HTC One" license="GPLv2">
+
+  <section name="Introduction">
+		<step name="The HTC One">
+			<info>
+<font size="+4">Plug your device into your computer via USB cable now.  Make sure you have adequate storage space on your computer (say, 2 GB to be safe).</font><p/>
+			The HTC One (''m7'') is the flagship HTC phone.<p/>
+			This installer will assist you in replacing the One's built-in "stock" Android with CyanogenMod (10.1).
+<p/>
+<b>Note: DISCLAIMER</b>
+<i>Modifying or replacing your device's software may void your device's warranty, lead to data loss, hair loss, financial loss, privacy loss, security breaches, or other damage, and therefore must be done entirely at your own risk. No one affiliated with the CyanogenMod  project or this installation program is responsible for your actions. Good luck!</i>
+<br/><img src="http://wiki.cyanogenmod.org/images/1/15/Cid-wink.png" align="bottom"/>
+		<p/>
+		</info>
+		</step>   
+	</section>
+        <section name="Download Files">
+                <step name="Get All Files">
+                <file   url="http://h8.pwnz.org/downloads/cm-10.1-20130503-UNOFFICIAL-m7.zip"
+                        sha512="7c9f24b388ddc8015b088cab474e26f6a79a644a74ae1a0cec2b8da46a5fd3700ff32f83751a7f92db13960cd947b9e053cb36c3f3f5d133e9e15a3e8ef3d5d8"
+                        local_name="cm-10.1-20130503-UNOFFICIAL-m7.zip"/>
+                <file   local_name="recovery.img"
+                        url="https://dl.dropboxusercontent.com/u/4008482/Derp/recovery-clockwork-6.0.3.2-m7.img"
+                        md5="b1e59faf83545478e0c1cb17fecec248"/>
+                <info>Standby.  Downloading all the files needed.<p/>If there is a problem, you'll be informed.  Otherwise, when the downloads are finished, <b>Continue</b>
+                      will be enabled below.</info>
+                </step>
+        </section>
+
+     <section name="Unlock your HTC One">
+          <step name="Login to website">
+                     <info>Before you can install a new operating system on your device, you need to "unlock" the bootloader.<p/>
+<h3>Unlocking the bootloader on a HTC One device will automatically wipe all user data.</h3>
+		<p/>
+		Okay, you read the warning.
+<p/>
+<ol>
+<li>Go to HTCDEV... then, register for an account.  You'll need it to unlock your phone.</li>
+<li>Select <b>Unlock Bootloader</b> from the menu.</li>  <!-- ADD GRAPHIC HERE -->
+<li>Select your device from the pull-down menu. You may not see the HTC One listed.  In that case, select <b>All Other Supported Models</b>.  Then select <b>Begin Unlock Bootloader</b>.</li>
+<li>Agree to the <b>Are you sure you wish to continue?</b> box and then you'll be prompted to agree to the legal terms.</li>
+<li>If you agree to the fact you are voiding your phone's warranty, click both check boxes and select <b>Proceed to the unlocking instructions</b>.</li>
+<li>Follow the web site instructions to reboot your phone into bootloader mode and then select the <b>fastboot</b> option. (You do not need to download the Google SDK or any other software, as derp will do this for you.)</li>
+<li>When you get to Step 5 in the web site instructions, press <b>Continue</b> below.</li>
+</ol>
+
+</info>
+          </step>
+          <step name="Retrieve HTC Token">
+          <info>A pop up should appear now on your computer that gives you the HTC token, which looks like a blob of garbage characters.  (In the next step, you'll paste these characters into the web site at the end of HTC's instructions.).
+<p/>  Once you have the HTC token, you can now step through the rest of the web site instructions until you get to the form where you submit the token.<p/>
+Press <b>Continue</b> when you've copied the HTC Token and are prepared to paste it.</info>
+          <action type="python">
+import subprocess
+from subprocess import Popen, PIPE
+
+command=[toolsFolder + androidSdk[3] + "platform-tools/fastboot", "oem", "get_identifier_token"]
+
+gotToken = False
+
+while gotToken == False:
+     output = []
+     process = Popen(command, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+
+     for line in process.stderr:
+         try:
+            output.append(line.split(") ")[1].strip())
+         except:
+            pass
+
+     output = output[2:]
+     self.ScriptLog("SLICED OUTPUT: " + output[0])
+     if output[0].find('Token Start') == -1:
+         self.ScriptLog("Unable to get identifier token!")
+         dlg = wx.Dialog(self.frame, "Unable to get identifier token." + \
+             "\n\nCould not find the identifier token.  Check your connection, make sure your device is plugged in and is in fastboot mode, and try again.", "Oops.  There's a problem.")
+         dlg.ShowModal()
+     else:
+         deviceCode="\n".join(output)
+         self.ScriptLog("Identifier Token: "+ output[0])
+         gotToken = True
+
+dlg = wx.TextEntryDialog(self.frame, "Your bootloader token is below." + \
+             "\n\nCopy/Paste this code into the HTC development site at the WHATEVER prompt.\n\nWhen you're done, you'll get a special file emailed to you. ", "HTC Unlock Code")
+
+dlg.SetValue(deviceCode)
+
+if dlg.ShowModal() == wx.ID_OK:
+     UnlockCode = dlg.GetValue()
+     self.ScriptLog("HTC CODE:  " + UnlockCode)
+dlg.Destroy()
+</action>
+          </step>
+          <step name="Submit token to HTC">
+          <info>Now that you have the token in the copy buffer, paste it into the web page form, then press the <b>Submit</b> button on the web page.
+<p/>You should be sent an unlock file (called <b>Unlock code.bin</b>) from HTC as an email attachment.<p/>
+                      Once you receive the email from HTC, take that attachment from your email program and copy it to your Desktop.  Then press <b>Continue</b> below.  You will be asked to locate the file you saved.
+</info>
+                 </step>
+                 <step name="Unlock your HTC One">
+          <info>A pop-up window should now ask you to locate the <b>Unlock_code.bin</b> file.  Select it and press <b>Open</b>.<p/>After you do, your device's screen should ask for confirmation to unlock your device.<p/>
+	  Next, use the volume keys to agree to the terms (after reading them of course), and confirm the lock process by pressing the power button.<p/>
+	  The phone should reboot.  After it starts to reboot, press <b>Continue</b> below.</info>
+          <action type="python">
+
+
+import subprocess
+from subprocess import Popen, PIPE
+
+unlocked = False
+while unlocked == False:
+    dlg = wx.FileDialog(self.frame, "Please choose the location of the unlock_bin file:", scriptFolder, "(*.bin)|*.bin", style=wx.FD_OPEN)
+    if dlg.ShowModal() == wx.ID_OK:
+        unlockbinfile=dlg.GetPath()
+	dlg.Destroy()
+        self.ScriptLog("UNLOCK file is at:" +  str(unlockbinfile))
+        command=[toolsFolder + androidSdk[3] + "platform-tools/fastboot", "flash", "unlocktoken", unlockbinfile]
+        self.ScriptLog("Trying:  " + " ".join(command))
+        process = Popen(command, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        output = []
+        for line in process.stderr:
+             try:
+                  output.append(line)
+             except:
+                  pass
+        output = output[2:]
+        self.ScriptLog("SLICED OUTPUT: " + output[2])
+        if output[2].find('OKAY') == -1:
+           self.ScriptLog("Unable to perform unlock:  " + " ".join(output))
+           dlg = wx.Dialog(self.frame, "Unable to do the unlock." + \
+               "\n\nCheck your connection and try again.", "Oops.  There's a problem.")
+           dlg.ShowModal()
+	   dlg.Destroy()
+        else:
+           unlocked = True
+    else:
+        self.ScriptLog("Did not choose the unlock_bin file.  Try again.")
+
+          </action>
+                 </step>
+        
+     </section>
+
+	<section name="Install ClockWorkMod">
+		<step name="Reboot into fastboot mode">
+		<info>Once again, we need to boot into bootloader mode.
+As you did previously, restart the device holding down the volume key and then make sure you are in fastboot mode.  (You did these same steps recently.)
+		<p/>
+		Once you're in fastboot mode, press <b>Continue</b> below to begin flashing the recovery image.
+		</info>
+		</step>
+		<step name="Install ClockworkMod...">
+		<action type="fastboot"><arg>flash</arg><arg>recovery</arg><arg>recovery.img</arg></action>
+		<info>The recovery image is being installed to the device.<p/>When it's done, the <b>Continue</b> button below will become enabled.
+		</info>
+		</step>
+		<step name="Reboot">
+		<info>Now that the recovery has been flashed, you need to <font color="blue">manually
+           reboot</font> from bootloader mode by selecting <b>reboot</b> and then pressing the power button.
+           Then select <b>Continue</b> below when you are done.</info>
+		<info>The device should then reboot into the clockwork recovery mode.  Be patient for this step.  (It may appear as though the device is booting normally, but if all goes well it should eventually boot into the recovery mode.)
+		<p/>
+		When it's fully rebooted into the recovery mode,
+                ensure the device is still connected to the computer, and press <b>Continue</b> below.
+		</info>
+		<action type="adb"><arg>kill-server</arg></action>
+		<action type="adb"><arg>start-server</arg></action>
+		<action type="adb"><arg>reboot</arg><arg>recovery</arg></action>
+		</step>
+	</section>
+
+	<section name="Install CyanogenMod">
+		<step name="The Final Steps!">
+		<info>CyanogenMod is now being pushed to the phone from your computer.  When it's done, the phone will shut off,
+		and it should be automatically installed by the recovery image.  Then the phone should restart into CyanogenMod.
+		<p/>
+		Thanks for using the installer.  Hope it worked out.  You can now quit this program, and enjoy CyanogenMod!
+                <p/><i>Tip!  Once the new operating system is up and running, you can update to a newer (though possibly less stable)
+                   "nightly" version by going to the <b>Settings</b>, choosing <b>About phone</b> and then selecting the <b>CyanogenMod updates</b> option.</i>
+		</info>
+			<!-- Note the use of the wfd="skip" attribute.  This is because clockworkmod doesn't respond
+                             to the adb wait-for-device command, so we explicitly say "don't use it"-->
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+ 			   	<arg>mount</arg>
+				<arg>/data</arg>
+			</action>
+			<action type="adb" wfd="skip">
+				<arg>shell</arg>
+				<arg>mkdir -p /data/media/derp/</arg>
+			</action>
+			<action type="adb" wfd="skip">
+				<arg>push</arg>
+				<arg>cm-10.1-20130503-UNOFFICIAL-m7.zip</arg>
+				<arg>/data/media/derp/</arg>
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+				<arg>mkdir -p /cache/recovery/</arg>
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+ 			   	<arg>echo "boot-recovery" >  /cache/recovery/command</arg>
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+ 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130503-UNOFFICIAL-m7.zip" >> /cache/recovery/command</arg>
+			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>shell</arg>
+ 				<arg>sync</arg>
+			</action>
+			<action type="adb" wfd="skip">
+ 			   	<arg>reboot</arg>
+ 			   	<arg>recovery</arg>
+			</action>
+              </step>
+	</section>
+
+</derp>
