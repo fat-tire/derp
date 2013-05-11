@@ -318,8 +318,9 @@ class Script():
         if not os.path.exists(downloadsFolder):
             os.makedirs(downloadsFolder)
 
-        self.debug = True  # while in development
-        self.frame.debugItem.Check(True)
+        # Change the line below to make debug ON by default.
+        self.frame.debugItem.Check(False)
+        self.OnDebug(-1)
 
         # when spawned process returns, let us know.
         self.frame.Connect(-1, -1, EVT_SUBPROCESS_DONE, self.EndSubProcess)
