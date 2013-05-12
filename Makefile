@@ -15,7 +15,7 @@ clean:
 	rm -f src/*.pyc
 	rm -f MANIFEST
 	rm -rf build dist
-	dh_clean
+	if [ -f "/etc/debian_version" ]; then dh_clean; fi
 
 install: sdist
 	python setup.py install
