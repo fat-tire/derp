@@ -2,10 +2,10 @@
 <derp device_codename="m7" os="Linux Darwin" device_name="HTC One" device_vendor="htc" app_version="0.001" script_version=".5" author = "cowmix" author_email="mmarch@gmail.com" author_twitter="@cowmix" title="CM10.1 for HTC One" license="GPLv2">
 
   <section name="Introduction">
-		<step name="The HTC One">
+		<step name="The HTC One (AT&amp;T)">
 			<info>
 <font size="+4">Plug your device into your computer via USB cable now.  Make sure you have adequate storage space on your computer (say, 2 GB to be safe).</font><p/>
-			The HTC One (''m7'') is the flagship HTC phone.<p/>
+			The HTC One (''m7'') is the flagship HTC phone.  <font color="RED">This is the AT&amp;T version.</font><p/>
 			This installer will assist you in replacing the One's built-in "stock" Android with CyanogenMod (10.1).
 <p/>
 <b>Note: DISCLAIMER</b>
@@ -13,13 +13,13 @@
 <br/><img src="http://wiki.cyanogenmod.org/images/1/15/Cid-wink.png" align="bottom"/>
 		<p/>
 		</info>
-		</step>   
+		</step>
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://h8.pwnz.org/downloads/cm-10.1-20130503-UNOFFICIAL-m7.zip"
-                        sha512="7c9f24b388ddc8015b088cab474e26f6a79a644a74ae1a0cec2b8da46a5fd3700ff32f83751a7f92db13960cd947b9e053cb36c3f3f5d133e9e15a3e8ef3d5d8"
-                        local_name="cm-10.1-20130503-UNOFFICIAL-m7.zip"/>
+                <file   url="http://get.cm/get/jenkins/27675/cm-10.1-20130511-NIGHTLY-m7.zip"
+                        sha512="ad3ccda243dc976c7fddf50cb549c047b6e44bd59077d31cdee4a45ba51a185b107635c5495d4f330cf902b92963819d104ab832c09e3e72e4e88e0d85fb2cd0"
+                        local_name="cm-10.1-20130511-NIGHTLY-m7.zip"/>
                 <file   local_name="recovery.img"
                         url="https://dl.dropboxusercontent.com/u/4008482/Derp/recovery-clockwork-6.0.3.2-m7.img"
                         md5="b1e59faf83545478e0c1cb17fecec248"/>
@@ -192,7 +192,7 @@ As you did previously, restart the device holding down the volume key and then m
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1-20130503-UNOFFICIAL-m7.zip</arg>
+				<arg>cm-10.1-20130511-NIGHTLY-m7.zip</arg>
 				<arg>/data/media/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -205,7 +205,7 @@ As you did previously, restart the device holding down the volume key and then m
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
- 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130503-UNOFFICIAL-m7.zip" >> /cache/recovery/command</arg>
+ 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130511-NIGHTLY-m7.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">
