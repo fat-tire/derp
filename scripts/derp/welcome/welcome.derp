@@ -49,11 +49,11 @@
             <section name="Run A Script">
                 <step name="Choose Installation Script">
                     <info>
-                    Now choose the installation script (ending in <tt>.derp</tt>) for your device.<p/>
-                    In the <b>File</b> menu bar item above, select </info>
+                    Now choose the installation script (ending in <tt>.derp</tt> or <tt>.xml</tt>).<p/>
+                    In the <b>File</b> menu item above, select </info>
                     <info os="Darwin"><b>Open Script</b>.</info>
                     <info os="Linux"><b>Open</b>.</info>
-                    <info><p/>Enjoy!<p/><i>Note:  Derp is still new.  There will likely be a more convenient list of all devices in the future.)</i></info>
+                    <info><p/>Enjoy!</info>
                 </step>
             </section>
         </derp>
