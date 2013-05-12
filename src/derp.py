@@ -500,6 +500,8 @@ class Script():
         self.subprocessRunning = True
         self.frame.nextBtn.Disable()
         self.frame.openItem.Enable(False)
+        self.frame.FAQItem.Enable(False)
+        self.frame.tutorialItem.Enable(False)
         self.frame.activityBar.Show(True)
         self.frame.Layout()
         self.subProcessThread = SubProcessThread(args, downloadsFolder,
@@ -527,6 +529,8 @@ class Script():
     def EndSubProcess(self, e):
         self.frame.activityBar.Hide()
         self.frame.nextBtn.Enable()
+        self.frame.FAQItem.Enable(True)
+        self.frame.tutorialItem.Enable(True)
         if self.updatedTools == True:
              self.frame.openItem.Enable(True)
         self.frame.Layout()
