@@ -24,7 +24,7 @@ This is to identify the version of Derp that your script is for.  Future version
 <p/>
 <tt><font color="blue">&lt;derp device_codename="mako" os="Linux Darwin" title="CM10.1-M1 for Mako" device_name="Nexus 4" device_vendor="lge" app_version="0.001" script_version=".5" author = "fattire" author_email="fattire@example.com" author_twitter="@fat__tire" license="GPLv2"&gt;</font></tt>
 <p/>
-These additional tags may be supported in future versions of Derp, so if you want to use 'em, it's recommended.  They'll be ignored if they're not needed.
+These additional tags may be required in future versions of Derp, so if you are able to supply 'em, it's recommended.  They'll simply be ignored if they're not needed.
 <p/>The <b>title="CM10.1-M1 for Mako"</b> is a general title for the script.  VERY briefly explain what it does.  It's not required, but recommended.
 <p/>The one other important attribute, <b>os="Linux Darwin"</b>, will be explained later.  For now, just know that it is optional, but you can use it to restrict the whole script to only run only in certain operating systems. 
 </info>
@@ -245,7 +245,9 @@ or...
 This example assumes that a root shell is available on the device.
 <p/>
 Valid types of actions currently are "<font color="green">adb</font>", "<font color="green">fastboot</font>",
- "<font color="green">bash</font>", and "<font color="green">updatetools</font>".  The "current" directory for all action items is the download folder.  Meaning, for example, that if you just downloaded "filename.zip" with the &lt;file&gt; tag, you should be able to <b>adb push filename.zip /sdcard/</b> without specifying the directory.
+ "<font color="green">python</font>", "<font color="green">bash</font>", and the rarely used "<font color="green">updatetools</font>".
+<p/>
+The "current" directory for all action items is the download folder.  Meaning, for example, that if you just downloaded "filename.zip" with the &lt;file&gt; tag, you should be able to <b>adb push filename.zip /sdcard/</b> without specifying the directory.
 <p/>
 The "adb" action type normally includes an "adb wait-for-device" command automatically before the command is executed, just as a 'sanity check' to ensure that the device is actually connected.  However, <b>some versions of clockworkmod do not respond to the "wait-for-device" adb command</b>.  You can elect to opt-out of this automatic check by adding an attribute that looks like this: <b>wfd="skip"</b> to the &lt;action&gt; tag.  That attribute says: don't use "adb wait-for-device" before issuing the command.
 <p/>
@@ -284,7 +286,7 @@ cp /tmp/derp/samplefile /tmp/derp/newfile<br/>
 <p/>
 <b>Again, when your script invokes a bash or python script, do not forget you are running as root! <font color="red">With bash/python scripts,
 be sure to explicitly specify EVERY directory for files you are writing, adding, or removing so that you do not accidentally overwrite the wrong thing.</font>
-</b>Running bash and python scripts as root is extremely/especially powerful/dangerous so test your
+</b>Running bash and python scripts as root is extremely/especially powerful/dangerous, so test your
 scripts very carefully.<p/>Also, <b>be sure to specify the operating system for all bash scripts</b> (see next section for how to do this)
 so that your scripts will be forward-compatible with operating systems that may not support bash.
 <p/> More types of actions will come if people think they're necessary.
