@@ -299,6 +299,7 @@ class Script():
         self.console = Console(None, "Console", self.log)
         self.ScriptLog("-----Welcome to The DERP Installer!-----")
         self.subprocessRunning = False
+        self.updatedTools = False
 
         self.LoadScriptFromFile(welcomeScript)
 
@@ -498,6 +499,7 @@ class Script():
     def StartSubProcess(self, args):
         self.subprocessRunning = True
         self.frame.nextBtn.Disable()
+        self.frame.openItem.Enable(False)
         self.frame.activityBar.Show(True)
         self.frame.Layout()
         self.subProcessThread = SubProcessThread(args, downloadsFolder,
@@ -525,6 +527,8 @@ class Script():
     def EndSubProcess(self, e):
         self.frame.activityBar.Hide()
         self.frame.nextBtn.Enable()
+        if self.updatedTools == True:
+             self.frame.openItem.Enable(True)
         self.frame.Layout()
         self.subprocessRunning = False
 
@@ -633,7 +637,8 @@ class Script():
             self.DoSubProcess(["chmod", "-R", "a-w", downloadsFolder])
             self.DoADB(["kill-server"], True)
             self.DoADB(["start-server"], True)
-            self.frame.openItem.Enable()
+            self.updatedTools = True
+            self.frame.openItem.Enable(True)
 
     def VerifyHash(self, filename, hash, algorithm):
         import hashlib
