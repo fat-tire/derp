@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
-<derp device_codename="grouper" os="Linux Darwin" device_name="Nexus 7" device_vendor="grouper" app_version="0.001" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" title="CM for grouper" license="GPLv2">
+<derp device_codename="grouper" os="Linux Darwin" device_name="Nexus 7" device_vendor="grouper" app_version="0.001" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" title="CM 10.1-RC2 for grouper" license="GPLv2">
 	
 	<section name="Introduction">
 		<step name="The Nexus 7 (non-GSM)">
 			<info>
-<font size="+4">Plug your device into your computer via USB cable now.  Make sure you have adequate storage space on your computer (say, 500MB to be safe).</font><p/>
+<font size="+4">Plug your device into your computer via USB cable now.  Make sure you have adequate storage space on your computer (say, 2 GB to be safe).</font><p/>
 			The Nexus 7 (''grouper'') is the first Nexus tablet manufactured by Asus in cooperation with Google.<p/>
 			This installer will assist you in replacing the Nexus 7's built-in "stock" Android with CyanogenMod.
 <p/>
@@ -18,9 +18,9 @@
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://get.cm/get/jenkins/25524/cm-10.1-20130420-NIGHTLY-grouper.zip"
-                        md5="2e098d90cf476e6d269c682df17c334f"
-                        local_name="cm-10.1-20130420-NIGHTLY-grouper.zip"/>
+                <file   url="http://www.get.cm/get/jenkins/27608/cm-10.1.0-RC2-grouper.zip"
+                        sha512="eb77b94debb2cb51b0d3765919f1abbbb682a7a9df5f2ae84019d6f1017f0245edc3316206160402555981c2e24c94a49d83d8eb534958bbf812b7c860b2a2c7"
+                        local_name="cm-10.1.0-RC2-grouper.zip"/>
                 <file   local_name="recovery.img"
                         url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.3.1-grouper.img"
                         md5="e74c6a250d1ad40c4aae2875a49b0311"/>
@@ -137,7 +137,7 @@
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1-20130420-NIGHTLY-grouper.zip</arg>
+				<arg>cm-10.1.0-RC2-grouper.zip</arg>
 				<arg>/data/media/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -150,7 +150,7 @@
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
- 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130420-NIGHTLY-grouper.zip" >> /cache/recovery/command</arg>
+ 			<arg>echo "--update_package=/data/media/derp/cm-10.1.0-RC2-grouper.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">
