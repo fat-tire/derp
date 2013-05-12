@@ -19,7 +19,7 @@ case "$1" in
    if dpkg-query -W xdg-utils; 
        then clear_mime;
    fi
-   rm /usr/share/derp/src/*.pyc
+   rm -f /usr/share/derp/src/*.pyc
    ;;
 
    *)
