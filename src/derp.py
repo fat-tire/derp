@@ -265,8 +265,8 @@ class MainWindow (wx.Frame):
     def OnAbout(self, event):
         info = wx.AboutDialogInfo()
         info.SetName(app_name)
-        info.SetDescription('A cross-platform installer for installing to " + \
-                            "Android mobile devices from a computer.')
+        info.SetDescription("A cross-platform installer for " + \
+                            "Android mobile devices (and more).")
         info.SetVersion(app_version)
         info.AddDeveloper('fattire')
         info.SetCopyright('(C) 2013 The developers of this program')
