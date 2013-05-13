@@ -532,7 +532,7 @@ class Script():
         self.frame.FAQItem.Enable(True)
         self.frame.tutorialItem.Enable(True)
         if self.updatedTools == True:
-             self.frame.openItem.Enable(True)
+            self.frame.openItem.Enable(True)
         self.frame.Layout()
         self.subprocessRunning = False
 
@@ -568,13 +568,13 @@ class Script():
 
     def DoPython(self, script, external):
         if external:
-             command = [python, "-c"]
-             self.DoSubProcess(command + [script])
+            command = [python, "-c"]
+            self.DoSubProcess(command + [script])
         elif not self.debug:
-             self.ScriptLog("Executing Python code: \n" + script)
-             exec(script)
+            self.ScriptLog("Executing Python code: \n" + script)
+            exec(script)
         else:
-             self.ScriptLog("DEBUG MODE:  Scripted Python code not executed.")
+            self.ScriptLog("DEBUG MODE:  Scripted Python code not executed.")
 
     def DoADB(self, scriptArgs, wfdSkip):
         command = [toolsFolder + androidSdk[3] + "platform-tools/adb"]
@@ -644,33 +644,33 @@ class Script():
             self.updatedTools = True
             self.frame.openItem.Enable(True)
 
-    def VerifyHash(self, filename, hash, algorithm):
+    def VerifyHash(self, filename, theHash, algorithm):
         import hashlib
         try:
             f = open(filename, 'r')
             content = f.read()
             if algorithm.lower() == "md5":
-                 h = hashlib.md5(content)
+                h = hashlib.md5(content)
             elif algorithm.lower() == "sha1":
-                 h = hashlib.sha1(content)
+                h = hashlib.sha1(content)
             elif algorithm.lower() == "sha224":
-                 h = hashlib.sha224(content)
+                h = hashlib.sha224(content)
             elif algorithm.lower() == "sha256":
-                 h = hashlib.sha256(content)
+                h = hashlib.sha256(content)
             elif algorithm.lower() == "sha384":
-                 h = hashlib.sha384(content)
+                h = hashlib.sha384(content)
             elif algorithm.lower() == "sha512":
-                 h = hashlib.sha512(content)
+                h = hashlib.sha512(content)
         except:
             self.ScriptLog("Error reading file for " + algorithm + \
                  " hash verification. (Does it exist?)")
             return False
-        if h.hexdigest() == hash:
+        if h.hexdigest() == theHash:
             self.ScriptLog(algorithm + " hash checks out for " + filename + ".")
             return True
         else:
             self.ScriptLog(algorithm + " failure for " + filename + "!  File needs to be (re)downloaded.")
-            self.ScriptLog("Expected hash : " + hash)
+            self.ScriptLog("Expected hash : " + theHash)
             self.ScriptLog("Actual hash   : " + h.hexdigest())
             return False
 
@@ -679,28 +679,28 @@ class Script():
         self.frame.nextBtn.Disable()
         # check hash first, just in case the file is already there.
         if "sha512" in filetag.attrib:
-            hash = filetag.get("sha512")
+            theHash = filetag.get("sha512")
             algorithm = "sha512"
         elif "sha384" in filetag.attrib:
-            hash = filetag.get("sha384")
+            theHash = filetag.get("sha384")
             algorithm = "sha384"
         elif "sha256" in filetag.attrib:
-            hash = filetag.get("sha256")
+            theHash = filetag.get("sha256")
             algorithm = "sha256"
         elif "sha224" in filetag.attrib:
-            hash = filetag.get("sha224")
+            theHash = filetag.get("sha224")
             algorithm = "sha224"
         elif "sha1" in filetag.attrib:
-            hash = filetag.get("sha1")
+            theHash = filetag.get("sha1")
             algorithm = "sha1"
         elif "md5" in filetag.attrib:
-            hash = filetag.get("md5")
+            theHash = filetag.get("md5")
             algorithm = "md5"
         else:
             self.ScriptLog("ERROR:  <File> tag does not contain a valid hash.")
 
         if self.VerifyHash(downloadsFolder + filetag.get("local_name"),
-                           hash, algorithm):
+                           theHash, algorithm):
             success = True
         else:
             attempt = 1
@@ -710,7 +710,7 @@ class Script():
                                    filetag.get("url")])
                 attempt += 1
                 if self.VerifyHash(downloadsFolder + filetag.get("local_name"),
-                                  hash, algorithm):
+                                  theHash, algorithm):
                     success = True
                     break
                 elif attempt == 5 and not self.debug:
