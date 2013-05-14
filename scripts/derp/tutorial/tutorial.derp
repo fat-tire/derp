@@ -174,7 +174,7 @@ U<br/>
 UL</tt>
 </font>
 <p/>
-With just these tags, you can create a full "informational" .derp file that the user can step through and read instructions.  Perfectly good for getting them to take steps themselves.<p/>But Derp is for more than just providing info.  It's supposed to do the actual installing too.  So let's talk about two important tags, <b>&lt;file&gt;</b> and <b>&lt;action&gt;</b>...
+With just these tags, you can create a full "informational" .derp file that the user can step through and read instructions.  Perfectly good for getting them to take steps themselves.<p/>But Derp is for more than just providing info.  It's supposed to do the actual installing too.  So let's talk about two important tags, <b><font color="blue">&lt;file&gt;</font></b> and <b><font color="blue">&lt;action&gt;</font></b>...
 </info>
 </step>
 </section>
@@ -208,7 +208,7 @@ hash method.</info>
 <section name='The "action" tag'>
 <step name="Making Derp Scripts Do Things">
 <info>
-So last but not least, this is the most powerful and useful of the Derp tags: <b>action</b>.  It can probably best be explained through examples:
+So last but not least, this is the most powerful and useful of the DERP tags: <font color="blue">&lt;action&gt;</font>.  It can probably best be explained through examples:
 <p/>
 <tt><font color="blue">
 &lt;step name="Rebooting your device"&gt;<br/>
@@ -247,18 +247,19 @@ This example assumes that a root shell is available on the device.
 Valid types of actions currently are "<font color="green">adb</font>", "<font color="green">fastboot</font>",
  "<font color="green">python</font>", "<font color="green">bash</font>", and the rarely used "<font color="green">updatetools</font>".
 <p/>
-The "current" directory for all action items is the download folder.  Meaning, for example, that if you just downloaded "filename.zip" with the &lt;file&gt; tag, you should be able to <b>adb push filename.zip /sdcard/</b> without specifying the directory.
-<p/>
-The "adb" action type normally includes an "adb wait-for-device" command automatically before the command is executed, just as a 'sanity check' to ensure that the device is actually connected.  However, <b>some versions of clockworkmod do not respond to the "wait-for-device" adb command</b>.  You can elect to opt-out of this automatic check by adding an attribute that looks like this: <b>wfd="skip"</b> to the &lt;action&gt; tag.  That attribute says: don't use "adb wait-for-device" before issuing the command.
+The "current" directory for all action items is the download folder.  Meaning, for example, that if you just downloaded "filename.zip" with the <font color="blue">&lt;file&gt;</font> tag, you should be able to <b>adb push filename.zip /sdcard/</b> without specifying the directory.
 <p/>
 Other things to notice:
 <p/><ul>
-<li><b>type="updatetools"</b> -- run this whenever you want to install or update fastboot and adb.  This is done automatically when the user runs derp (before they can select any .derp scripts), so it's probably never necessary.</li><br/>
-<li><b>type="fastboot"</b> -- separate all arguments to fastboot with the &lt;arg&gt; tag.  The location of fastboot is known automatically and it should hopefully run in all supported operating systems.  Make sure you've prepared the user by telling them in a previous step to plug in their device and put it in fastboot mode before you run any fastboot commands (or they won't work.)</li><br/>
-<li><b>type="adb"</b> -- separate all arguments to adb with the &lt;arg&gt; tag.  Similar to adb, don't worry about how it is invoked.  Just be sure to be as informative to the user as possible (tell them to plug in the device in advance, for example, and make sure they've enabled adb on the device and approved the RSA key if necessary.  <b>type="adb"</b> runs "adb wait-for-device" as a double-check before issuing a command just to make sure the device is actually there.</li><br/>
-<li><b>type="python"</b> -- This will run (<b>as root!</b>) the python script which you put between the  &lt;action&gt; and  &lt;action&gt; tags.  If you add <b>external="true"</b> the python script will run as a standalone process (as if typed from the command line).  Without <b>external="true"</b>, it will run inline (using the python <b>exec</b> command, and you will have access to all the internal variables derp uses.</li><br/>
-<li><b>type="bash"</b> -- This will run (<b>as root!</b>) the bash script which you put between the  &lt;action&gt; and  &lt;action&gt; tags.</li>
+<li><b><font color="blue">type="</font><font color="green">updatetools</font><font color="blue">"</font></b> -- run this whenever you want to install or update fastboot and adb.  This is done automatically when the user runs derp (before they can select any .derp scripts), so it's probably never necessary.</li><br/>
+<li><b><font color="blue">type="</font><font color="green">fastboot</font><font color="blue">"</font></b> -- separate all arguments to fastboot with the &lt;arg&gt; tag.  The location of fastboot is known automatically and it should hopefully run in all supported operating systems.  Make sure you've prepared the user by telling them in a previous step to plug in their device and put it in fastboot mode before you run any fastboot commands (or they won't work.)</li><br/>
+<li><b><font color="blue">type="</font><font color="green">adb</font><font color="blue">"</font></b> -- separate all arguments to adb with the &lt;arg&gt; tag.  Similar to adb, don't worry about how it is invoked.  Just be sure to be as informative to the user as possible (tell them to plug in the device in advance, for example, and make sure they've enabled adb on the device and approved the RSA key if necessary.  <b>type="adb"</b> runs "adb wait-for-device" as a double-check before issuing a command just to make sure the device is actually there.  However, <b>some versions of clockworkmod do not respond to the "wait-for-device" adb command</b>.  You can elect to opt-out of this automatic check by adding an attribute that looks like this: <b>wfd="skip"</b> to the &lt;action&gt; tag.  That attribute says: don't use "adb wait-for-device" before issuing the command.</li><br/>
+<li><b><font color="blue">type="</font><font color="green">python</font><font color="blue">"</font></b> -- This will run (<b>as root!</b>) the python script which you put between the  &lt;action&gt; and  &lt;action&gt; tags.  If you add <b>external="true"</b> the python script will run as a standalone process (as if typed from the command line).  Without <b>external="true"</b>, it will run inline (using the python <b>exec</b> command, and you will have access to all the internal variables derp uses.</li><br/>
+<li><b><font color="blue">type="</font><font color="green">bash</font><font color="blue">"</font></b> -- This will run (<b>as root!</b>) the bash script which you put between the  &lt;action&gt; and  &lt;action&gt; tags.</li>
 </ul><p/>
+<p/>If you expect to see a certain output from your actions, just add
+<tt><font color="blue">expect="</font><font color="green">Look for this string</font><font color="blue">"</font></tt> within the <font color="blue">&lt;action&gt;</font> tag. 
+If the script output does NOT include this string, the script will stop and warn the user that something unexpected happened.<p/>
 Example of a python script:
 <p/>
 <tt><font color="blue">&lt;step name="<font color="green">Pop up a dialog!</font>"&gt;<br/>
@@ -289,8 +290,8 @@ be sure to explicitly specify EVERY directory for files you are writing, adding,
 </b>Running bash and python scripts as root is extremely/especially powerful/dangerous, so test your
 scripts very carefully.<p/>Also, <b>be sure to specify the operating system for all bash scripts</b> (see next section for how to do this)
 so that your scripts will be forward-compatible with operating systems that may not support bash.
-<p/> More types of actions will come if people think they're necessary.
-<p/>Remember you can stop the actions from actually being executed by turning on <b>Debug Mode</b>
+
+<p/>Remember you can stop actions from actually being executed by turning on <b>Debug Mode</b>
 <p/><b>As with file downloading, don't forget that you are running as root so you may wish to clean up any files you create as they
 will have been created by the root user.</b>
 <p/>That's it.  You're now a Derp master.  Except... one more thing...
@@ -324,7 +325,7 @@ Here are some parting thoughts in putting together your steps.
 <p/>
 <ul>
 <li>It's probably a good idea to start every Derp script with a step that is simply informational-- tell the user what the script does with as much detail as you think is necessary.  Be sure to list all requirements so they're not caught off guard halfway through the process.</li>
-<li>It may be smart to put all the &lt;file&gt; tags at the beginning of your script.  That way, if the files are not available online for some reason, the user won't get stuck halfway through an install.  In other words, make sure you have all the files you need.</li>
+<li>It may be smart to put all the <font color="blue">&lt;file&gt;</font> tags at the beginning of your script.  That way, if the files are not available online for some reason, the user won't get stuck halfway through an install.  In other words, make sure you have all the files you need.</li>
 <li>FYI:  If for some reason a file is unable to load after a few tries, the user should automatically be notified there's a problem.  The script keeps going though after they acknowledge the problem, so if you want them to abandon ship at that point, make sure to tell them.</li>
 <li>Just because you have all these tags available doesn't mean you have to use them.  You could do an installation in a single &lt;step&gt; or two.  Conversely you could have an entire tutorial that is just informative or guides the users through steps without actually doing anything.</li>
 <li>If it makes things simpler, you can write scripts that are intended only for specific operating systems.  use the <b>os=</b> tag so that people don't run them on the wrong one.  The nice thing about the adb/fastboot/file tags, however, are they should work in any operating system.</li>

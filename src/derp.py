@@ -98,7 +98,7 @@ class SubProcessThread(Thread):
 
     def run(self):
         import subprocess
-        self.p = subprocess.Popen(self.args, stderr=subprocess.PIPE,
+        self.p = subprocess.Popen(self.args, stderr=subprocess.STDOUT,
                      stdout=subprocess.PIPE, cwd=self.cwd)
         self.p.wait()
         wx.PostEvent(self.notify, SubProcessDoneEvt(self.p))
@@ -111,7 +111,7 @@ class LicenseFrame (wx.Frame):
 
     def __init__(self, parent, text):
         dw, dh = wx.DisplaySize()
-        wx.Frame.__init__(self, parent, title="License Info", size=(int(dw *0.8), int(dh * 0.8)))
+        wx.Frame.__init__(self, parent, title="License Info", size=(int(dw * 0.8), int(dh * 0.8)))
         self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.control.SetFont(wx.Font(family=wx.FONTFAMILY_TELETYPE,
                              pointSize=12, style=wx.FONTSTYLE_NORMAL,
@@ -128,7 +128,7 @@ class Console (wx.Frame):
     def __init__(self, parent, title, text):
         dw, dh = wx.DisplaySize()
         wx.Frame.__init__(self, parent, title="Console", size=(int(dw * 0.8), int(dh * 0.8)))
-        #define the console
+        # define the console
         self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.control.SetFont(wx.Font(family=wx.FONTFAMILY_TELETYPE,
                              pointSize=12, style=wx.FONTSTYLE_NORMAL,
@@ -156,7 +156,7 @@ class MainWindow (wx.Frame):
 
         self.parent = parent
 
-        #create menubar, menus & bindings
+        # create menubar, menus & bindings
         menuBar = wx.MenuBar()
         self.fileMenu = wx.Menu()
         self.editMenu = wx.Menu()
@@ -222,7 +222,7 @@ class MainWindow (wx.Frame):
         self.SetBackgroundColour(sectionbgcolor)
         self.nextBtn.SetFocus()
 
-        #progress bar
+        # progress bar
         self.activityBar = wx.Gauge(self, wx.ID_ANY)
         self.activityBar.Hide()
 
@@ -299,6 +299,8 @@ class Script():
         self.console = Console(None, "Console", self.log)
         self.ScriptLog("-----Welcome to The DERP Installer!-----")
         self.subprocessRunning = False
+        self.processLog = ""
+        self.expectString = ""
         self.updatedTools = False
 
         self.LoadScriptFromFile(welcomeScript)
@@ -321,6 +323,7 @@ class Script():
 
         # Change the line below to make debug ON by default.
         self.frame.debugItem.Check(False)
+        self.debug = False
         self.OnDebug(-1)
 
         # when spawned process returns, let us know.
@@ -362,7 +365,7 @@ class Script():
             self.console.Show(not self.console.IsShown())
             self.console.Raise()
         except:
-            #console was closed, so recreate it
+            # console was closed, so recreate it
             self.console = Console(None, "Console", self.log)
             self.console.Show(not self.console.IsShown())
 
@@ -450,7 +453,7 @@ class Script():
       """Warning:  This script contains bash scripts without specifying """ + \
       """ the operating system (via the "os" attribute).\n\nThis is """ + \
       """ discouraged, as the script will run on ALL operating systems """ + \
-      """(some of which may not actually support bash).  The script will """ +\
+      """(some of which may not actually support bash).  The script will """ + \
       """now start.  This notice was just a warning.""")
                 sawWarning = True
         return True
@@ -498,6 +501,7 @@ class Script():
 
     def StartSubProcess(self, args):
         self.subprocessRunning = True
+        self.processLog = ""
         self.frame.nextBtn.Disable()
         self.frame.openItem.Enable(False)
         self.frame.FAQItem.Enable(False)
@@ -511,20 +515,29 @@ class Script():
     def WaitForProcess(self):
         import time
         import select
+
         while self.subprocessRunning:
             wx.Yield()
             if self.subProcessThread.p != None:
                 if select.select([self.subProcessThread.p.stdout],
                                  [], [], 0.0)[0]:
-                    self.ScriptLog(10 * " " + \
-                            self.subProcessThread.p.stdout.readline().rstrip())
-                if select.select([self.subProcessThread.p.stderr],
-                                 [], [], 0.0)[0]:
-                    self.ScriptLog(10 * " " + \
-                            self.subProcessThread.p.stderr.readline().rstrip())
+                    stdoutString = self.subProcessThread.p.stdout.read()
+
+                    self.ScriptLog("SUBPROCESS OUTPUT:\n" + stdoutString)
+                    self.processLog = self.processLog + stdoutString
             time.sleep(.25)
             wx.Yield()
             self.frame.activityBar.Pulse()
+        # get anything left in the pipe after process stops...
+        try:
+            if select.select([self.subProcessThread.p.stdout],
+                         [], [], 0.0)[0]:
+                stdoutString = self.subProcessThread.p.stdout.read()
+                self.ScriptLog(stdoutString)
+                self.processLog = self.processLog + stdoutString
+        except:
+            pass
+        self.CheckForExpectedString()
 
     def EndSubProcess(self, e):
         self.frame.activityBar.Hide()
@@ -536,17 +549,37 @@ class Script():
         self.frame.Layout()
         self.subprocessRunning = False
 
+    def CheckForExpectedString(self):
+        if self.expectString != "":
+            if self.processLog.find(self.expectString) == -1:
+                self.ScriptLog("Expected string in action output NOT FOUND!")
+                warningText = \
+          """Warning:  This script was expecting to see output  which """ + \
+          """should have included:\n\n""" + self.expectString + "\n\n" + \
+          """However, this was not in the output, which was this:\n\n""" + \
+          self.processLog + "\n\nThe script will now continue, """ + \
+          """but you are advised to examine the console to """ + \
+          """determine what may have gone wrong and try again if necessary."""
+                self.frame.Notify(warningText)
+            else:
+                self.ScriptLog("Expected action output string was found.")
+
     def DoSubProcess(self, args):
-        self.ScriptLog(("DEBUG MODE [" if self.debug else "ACTION  : [") + \
-                        ' '.join(args) + "]")
+        self.ScriptLog(("DEBUG MODE [" if self.debug else "ACTION  : [") + ' '.join(args) + "]")
         if not self.debug:
             self.StartSubProcess(args)
 
     def DoAction(self, action):
+
         args = []
         for line in action:
             if line.tag == "arg":
                 args.append(line.text)
+        if "expect" in action.attrib:
+            self.expectString = action.get("expect")
+            self.ScriptLog("Expecting to see this string in next action:\n" + self.expectString)
+        else:
+            self.expectString = ""
         if action.get("type") == "updatetools":
             self.UpdateTools()
         elif action.get("type") == "adb":
@@ -567,12 +600,20 @@ class Script():
         self.DoSubProcess(command + [script])
 
     def DoPython(self, script, external):
+        from StringIO import StringIO
+
         if external:
             command = [python, "-c"]
             self.DoSubProcess(command + [script])
         elif not self.debug:
             self.ScriptLog("Executing Python code: \n" + script)
+            buff = StringIO()
+            sys.stdout = buff
             exec(script)
+            sys.stdout = sys.__stdout__
+            self.processLog = buff.getvalue()
+            self.ScriptLog("PYTHON OUTPUT:\n" + self.processLog)
+            self.CheckForExpectedString()
         else:
             self.ScriptLog("DEBUG MODE:  Scripted Python code not executed.")
 
@@ -581,7 +622,11 @@ class Script():
         # NOTE:  "wait-for-device" doesn't work with clockworkmod
         # use the wfd="skip" attribute in <action> to override.
         if not wfdSkip:
+#           don't wait for output on wait-for-device
+            temp = self.expectString
+            self.expectString = ""
             self.DoSubProcess(command + ["wait-for-device"])
+            self.expectString = temp
         self.DoSubProcess(command + scriptArgs)
 
     def DoFastboot(self, scriptArgs):
@@ -596,7 +641,7 @@ class Script():
             if not os.path.isfile(udevRules[0] + udevRules[1]):
                 self.ScriptLog("Copying udev file:  " + udevRules[1] + \
                                " to " + udevRules[0])
-                self.DoSubProcess(["cp", os.path.dirname( \
+                self.DoSubProcess(["cp", os.path.dirname(\
                                 os.path.realpath(__file__)) + \
                                 "/../" + udevRules[1], udevRules[0] + \
                                 udevRules[1]])
@@ -606,24 +651,24 @@ class Script():
         attempt = 1
         while not os.access(toolsFolder + androidSdk[3] + "tools/android",
                              os.X_OK):
-            self.ScriptLog("Try #" + str(attempt) +
+            self.ScriptLog("Try #" + str(attempt) + 
                            ":  Trying to install tools.")
             self.DoSubProcess(["curl", "-sLo" + toolsFolder + androidSdk[1],
                                 androidSdk[0] + androidSdk[1]])
             if self.VerifyHash(toolsFolder + androidSdk[1], androidSdk[2], "sha512"):
-                self.DoSubProcess(["tar", "-C" + toolsFolder, "-xvf" +
+                self.DoSubProcess(["tar", "-C" + toolsFolder, "-xvf" + 
                                    toolsFolder + androidSdk[1]])
             attempt += 1
             if attempt == 6:
                 self.ScriptLog("Tried to download the tools 5 times.  Failed.")
                 if not self.debug:
-                    self.frame.Notify("Just to let you know, this script " +
-                             "tried " +
-                             "five times to update the tools but was unable " +
-                             "to do so.  Please check your Internet " +
-                             "connection " +
-                             "and try running Derp again.  For now, " +
-                             "the script will continue.  This is just for " +
+                    self.frame.Notify("Just to let you know, this script " + 
+                             "tried " + 
+                             "five times to update the tools but was unable " + 
+                             "to do so.  Please check your Internet " + 
+                             "connection " + 
+                             "and try running Derp again.  For now, " + 
+                             "the script will continue.  This is just for " + 
                              "your information.")
                 else:
                     self.ScriptLog("(Next time, try running DERP with DEBUG MODE turned off.)")
@@ -640,6 +685,7 @@ class Script():
             self.DoSubProcess(["chmod", "-R", "a-w", toolsFolder])
             self.DoSubProcess(["chmod", "-R", "a-w", downloadsFolder])
             self.DoADB(["kill-server"], True)
+            self.expectString = "daemon started successfully"
             self.DoADB(["start-server"], True)
             self.updatedTools = True
             self.frame.openItem.Enable(True)
@@ -705,7 +751,7 @@ class Script():
         else:
             attempt = 1
             while attempt < 5:
-                self.DoSubProcess(["curl", "-sLo" + downloadsFolder +
+                self.DoSubProcess(["curl", "-sLo" + downloadsFolder + 
                                    filetag.get("local_name"),
                                    filetag.get("url")])
                 attempt += 1
@@ -714,14 +760,14 @@ class Script():
                     success = True
                     break
                 elif attempt == 5 and not self.debug:
-                    self.frame.Notify("ERROR downloading" +
-                        filetag.get("local_name") +
-                        " -- Derp tried several times to download " +
-                        "this file, but was unable to download and/or " +
-                        "verify it.  The script will continue " +
-                        "now, but you should know things may go downhill " +
-                        "from here.  You may want to " +
-                        "check the installation script as well as your " +
+                    self.frame.Notify("ERROR downloading" + 
+                        filetag.get("local_name") + 
+                        " -- Derp tried several times to download " + 
+                        "this file, but was unable to download and/or " + 
+                        "verify it.  The script will continue " + 
+                        "now, but you should know things may go downhill " + 
+                        "from here.  You may want to " + 
+                        "check the installation script as well as your " + 
                         "Internet connection to see what the deal is.")
         self.frame.nextBtn.Enable()
         self.frame.nextBtn.SetFocus()
@@ -729,9 +775,9 @@ class Script():
 
     def SkipOsAttributes(self):
 
-#-- skipping any section/step with the "os" attribute whenever
+# -- skipping any section/step with the "os" attribute whenever
 # that attribute has been
-#-- set for a particular OS other than this one.
+# -- set for a particular OS other than this one.
 
         sections = self.thisScript.findall("section")
         for num in range(self.currentSection, len(sections)):
