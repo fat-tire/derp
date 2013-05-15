@@ -550,7 +550,7 @@ class Script():
         self.subprocessRunning = False
 
     def CheckForExpectedString(self):
-        if self.expectString != "":
+        if self.expectString != "" and not self.debug:
             if self.processLog.find(self.expectString) == -1:
                 self.ScriptLog("Expected string in action output NOT FOUND!")
                 warningText = \
@@ -685,7 +685,6 @@ class Script():
             self.DoSubProcess(["chmod", "-R", "a-w", toolsFolder])
             self.DoSubProcess(["chmod", "-R", "a-w", downloadsFolder])
             self.DoADB(["kill-server"], True)
-            self.expectString = "daemon started successfully"
             self.DoADB(["start-server"], True)
             self.updatedTools = True
             self.frame.openItem.Enable(True)
