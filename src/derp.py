@@ -45,33 +45,31 @@ if wx.MAJOR_VERSION == 2:
 
 app_name = "DERP"
 app_version = "0.001"
-scriptFolder = os.path.dirname(os.path.realpath(__file__)) + "/../scripts/"
-home = os.path.expanduser("~")
+scriptFolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scripts/")
 
 if platform.system() == "Darwin":
     androidSdk = ["http://dl.google.com/android/",
                   "android-sdk_r21.1-macosx.zip",
                   "ac2dc476c14ae60e85bc2d889cdab0ff17992891e0ed9107e651aaa86c18a1d3ff9df81fd6bd35c01b26010484fd67a84915f157749bce7a061c7fe4b789c405",
-                  "android-sdk-macosx/"]
-    toolsFolder = "/Library/Application Support/" + app_name + "/tools/"
-    downloadsFolder = "/Library/Application Support/" + app_name + \
-                      "/downloads/"
+                  "android-sdk-macosx"]
+    toolsFolder = os.path.join("/Library", "Application Support", app_name, "tools")
+    downloadsFolder = os.path.join("/Library", "Application Support", app_name, "downloads")
 elif platform.system() == "Linux":
     androidSdk = ["http://dl.google.com/android/",
                   "android-sdk_r21.1-linux.tgz",
                   "160cd51f965a23120cf63abe02b9a9ce8913d1239a848bc423b33ad10eff65b30147c6b11ab751aa12154292ce0a7837aa60def1cd31a2ccb5d4fc6fcb6d2c24",
-                  "android-sdk-linux/"]
-    toolsFolder = "/opt/" + app_name.lower() + "/tools/"
-    downloadsFolder = "/tmp/" + app_name.lower() + "/downloads/"
+                  "android-sdk-linux"]
+    toolsFolder = os.path.join("/opt", app_name.lower(), "tools")
+    downloadsFolder = os.path.join("/tmp", app_name.lower(), "downloads")
     udevRules = ["/etc/udev/rules.d/", "99-android.rules"]
 
 bash = "/bin/bash"
 python = sys.executable
 
-licenseFile = os.path.dirname(os.path.realpath(__file__)) + "/../LICENSE"
-welcomeScript = scriptFolder + "derp/welcome/welcome.derp"
-tutorialScript = scriptFolder + "derp/tutorial/tutorial.derp"
-faqScript = scriptFolder + "derp/faq/faq.derp"
+licenseFile = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "LICENSE")
+welcomeScript = os.path.join(scriptFolder, "derp", "welcome", "welcome.derp")
+tutorialScript = os.path.join(scriptFolder, "derp", "tutorial", "tutorial.derp")
+faqScript = os.path.join(scriptFolder, "derp", "faq", "faq.derp")
 
 sectionbgcolor = "#E8E8E8" if platform.system() == "Darwin" else "#E0E0E0"
 infobgcolor = "#FFFFFF"
@@ -641,23 +639,23 @@ class Script():
             if not os.path.isfile(udevRules[0] + udevRules[1]):
                 self.ScriptLog("Copying udev file:  " + udevRules[1] + \
                                " to " + udevRules[0])
-                self.DoSubProcess(["cp", os.path.dirname(\
-                                os.path.realpath(__file__)) + \
-                                "/../" + udevRules[1], udevRules[0] + \
-                                udevRules[1]])
+                self.DoSubProcess(["cp", os.path.dirname( \
+                                os.path.join(os.path.realpath(__file__)), \
+                                "..", udevRules[1]), os.path.join(udevRules[0], \
+                                udevRules[1])])
 
         self.ScriptLog("ACTION  : Updating SDK Tools...")
         self.ScriptLog(" " * 10 + "Checking for SDK...")
         attempt = 1
-        while not os.access(toolsFolder + androidSdk[3] + "tools/android",
+        while not os.access(os.path.join(toolsFolder, androidSdk[3], "tools", "android"),
                              os.X_OK):
             self.ScriptLog("Try #" + str(attempt) + 
                            ":  Trying to install tools.")
-            self.DoSubProcess(["curl", "-sLo" + toolsFolder + androidSdk[1],
-                                androidSdk[0] + androidSdk[1]])
-            if self.VerifyHash(toolsFolder + androidSdk[1], androidSdk[2], "sha512"):
+            self.DoSubProcess(["curl", "-sLo" + os.path.join(toolsFolder, androidSdk[1]),
+                                os.path.join(androidSdk[0], androidSdk[1])])
+            if self.VerifyHash(os.path.join(toolsFolder, androidSdk[1]), androidSdk[2], "sha512"):
                 self.DoSubProcess(["tar", "-C" + toolsFolder, "-xvf" + 
-                                   toolsFolder + androidSdk[1]])
+                                   os.path.join(toolsFolder, androidSdk[1])])
             attempt += 1
             if attempt == 6:
                 self.ScriptLog("Tried to download the tools 5 times.  Failed.")
@@ -676,11 +674,11 @@ class Script():
         else:
             self.ScriptLog("Previous SDK found.  No need to get it again!")
 
-        if os.access(toolsFolder + androidSdk[3] + "tools/android", os.X_OK):
-            self.DoSubProcess([toolsFolder + androidSdk[3] + "tools/android",
+        if os.access(os.path.join(toolsFolder, androidSdk[3], "tools", "android"), os.X_OK):
+            self.DoSubProcess([os.path.join(toolsFolder, androidSdk[3], "tools", "android"), \
                             "update", "sdk", \
                             "--no-ui", "--filter", "platform-tool, tool"])
-            self.DoSubProcess([toolsFolder + androidSdk[3] + "tools/android",
+            self.DoSubProcess([os.path.join(toolsFolder, androidSdk[3], "tools", "android"), \
                                "update", "adb"])
             self.DoSubProcess(["chmod", "-R", "a-w", toolsFolder])
             self.DoSubProcess(["chmod", "-R", "a-w", downloadsFolder])
