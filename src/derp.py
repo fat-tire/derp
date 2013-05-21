@@ -125,6 +125,7 @@ class CheckConnectionThread(Thread):
 
     def __init__(self, cwd, notifyclass):
         Thread.__init__(self)
+        self.daemon = True
         self.cwd = cwd
         self.notifyclass = notifyclass
         self.start()
@@ -155,9 +156,6 @@ class CheckConnectionThread(Thread):
                   self.sendUpdateEvent(FASTBOOT_CONNECTED, fastboot_out[0])
              else:
                   self.sendUpdateEvent(NO_CONNECTION, "Check your connection.")
-
-    def OnQuit(self, e):
-        self.Destroy()
 
 class LicenseFrame (wx.Frame):
 
@@ -471,10 +469,11 @@ class Script():
             try:
                 if self.console:
                     self.console.OnQuit(e)
+            except:
+                pass
+            try:
                 if self.license:
                     self.license.OnQuit(e)
-                # (Any subprocess will have to quit on its own,
-                #  unless there's a way to force quit it.)
             except:
                 pass
             sys.exit(0)
