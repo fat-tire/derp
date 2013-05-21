@@ -616,7 +616,7 @@ class Script():
             self.ScriptLog("DEBUG MODE:  Scripted Python code not executed.")
 
     def DoADB(self, scriptArgs, wfdSkip):
-        command = [toolsFolder + androidSdk[3] + "platform-tools/adb"]
+        command = [os.path.join(toolsFolder, androidSdk[3], "platform-tools", "adb")]
         # NOTE:  "wait-for-device" doesn't work with clockworkmod
         # use the wfd="skip" attribute in <action> to override.
         if not wfdSkip:
@@ -628,7 +628,7 @@ class Script():
         self.DoSubProcess(command + scriptArgs)
 
     def DoFastboot(self, scriptArgs):
-        command = [toolsFolder + androidSdk[3] + "platform-tools/fastboot"]
+        command = [os.path.join(toolsFolder, androidSdk[3], "platform-tools", "fastboot")]
         self.DoSubProcess(command + scriptArgs)
 
     def UpdateTools(self):
@@ -636,7 +636,7 @@ class Script():
         # copy udev rules file if it doesn't exist already
         # (but the directory for it does)
         if platform.system() == "Linux" and os.path.isdir(udevRules[0]):
-            if not os.path.isfile(udevRules[0] + udevRules[1]):
+            if not os.path.isfile(os.path.join(udevRules[0], udevRules[1])):
                 self.ScriptLog("Copying udev file:  " + udevRules[1] + \
                                " to " + udevRules[0])
                 self.DoSubProcess(["cp", os.path.dirname( \
@@ -742,17 +742,17 @@ class Script():
         else:
             self.ScriptLog("ERROR:  <File> tag does not contain a valid hash.")
 
-        if self.VerifyHash(downloadsFolder + filetag.get("local_name"),
+        if self.VerifyHash(os.path.join(downloadsFolder, filetag.get("local_name")),
                            theHash, algorithm):
             success = True
         else:
             attempt = 1
             while attempt < 5:
-                self.DoSubProcess(["curl", "-sLo" + downloadsFolder + 
-                                   filetag.get("local_name"),
+                self.DoSubProcess(["curl", "-sLo" + os.path.join(downloadsFolder, 
+                                   filetag.get("local_name")),
                                    filetag.get("url")])
                 attempt += 1
-                if self.VerifyHash(downloadsFolder + filetag.get("local_name"),
+                if self.VerifyHash(os.path.join(downloadsFolder, filetag.get("local_name")),
                                   theHash, algorithm):
                     success = True
                     break
