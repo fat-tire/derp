@@ -47,6 +47,13 @@ app_name = "DERP"
 app_version = "0.001"
 scriptFolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scripts/")
 
+# adb/fastboot modes
+NO_CONNECTION              = 0
+ADB_CONNECTED              = 1
+FASTBOOT_CONNECTED         = 2
+MULTIPLE_DEVICES_CONNECTED = 3
+
+# sdk locations
 if platform.system() == "Darwin":
     androidSdk = ["http://dl.google.com/android/",
                   "android-sdk_r21.1-macosx.zip",
@@ -63,6 +70,7 @@ elif platform.system() == "Linux":
     downloadsFolder = os.path.join("/tmp", app_name.lower(), "downloads")
     udevRules = ["/etc/udev/rules.d/", "99-android.rules"]
 
+# bash/python locations.  /bin/bash supposedly works w/Windows, but not sure about that. 
 bash = "/bin/bash"
 python = sys.executable
 
@@ -75,14 +83,13 @@ sectionbgcolor = "#E8E8E8" if platform.system() == "Darwin" else "#E0E0E0"
 infobgcolor = "#FFFFFF"
 
 EVT_SUBPROCESS_DONE = wx.NewId()
-
+EVT_CONNECTION_STATUS = wx.NewId()
 
 class SubProcessDoneEvt(wx.PyEvent):
     def __init__(self, returnCode):
         wx.PyEvent.__init__(self)
         self.SetEventType(EVT_SUBPROCESS_DONE)
         self.returnCode = returnCode
-
 
 class SubProcessThread(Thread):
 
@@ -104,6 +111,53 @@ class SubProcessThread(Thread):
     def OnQuit(self, e):
         self.Destroy()
 
+
+class ConnectionUpdatedEvt(wx.PyEvent):
+
+    def __init__(self, status, text):
+        wx.PyEvent.__init__(self)
+        self.SetEventType(EVT_CONNECTION_STATUS)
+        self.status = status
+        self.text = text
+
+
+class CheckConnectionThread(Thread):
+
+    def __init__(self, cwd, notifyclass):
+        Thread.__init__(self)
+        self.cwd = cwd
+        self.notifyclass = notifyclass
+        self.start()
+        self.p = None
+
+    def run(self):
+        import time
+        while 1 == 1:
+             self.bigloop()
+             time.sleep(2)
+
+    def doSubprocess(self, args):
+        import subprocess
+        self.p = subprocess.Popen(args, stderr=subprocess.STDOUT,
+                     stdout=subprocess.PIPE, cwd=self.cwd)
+        self.p.wait()
+        return self.p.stdout.read()
+
+    def sendUpdateEvent(self, status, text):
+        wx.PostEvent(self.notifyclass, ConnectionUpdatedEvt(status, text))
+
+    def bigloop(self):
+             adb_output = self.doSubprocess([os.path.join(self.cwd, "adb"), "get-state"])
+             if "device" in adb_output:
+                  self.sendUpdateEvent(ADB_CONNECTED, self.doSubprocess([os.path.join(self.cwd, "adb"), "get-serialno"]))
+             elif "fastboot" in self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]):
+                  fastboot_out = self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]).split("\t")
+                  self.sendUpdateEvent(FASTBOOT_CONNECTED, fastboot_out[0])
+             else:
+                  self.sendUpdateEvent(NO_CONNECTION, "Check your connection.")
+
+    def OnQuit(self, e):
+        self.Destroy()
 
 class LicenseFrame (wx.Frame):
 
@@ -198,23 +252,27 @@ class MainWindow (wx.Frame):
         # create panels
         bottomPanel = wx.Panel(self, -1)
         statusPanel = wx.Panel(self, -1)
+        connectionPanel = wx.Panel(self, -1)
         self.statusText = wx.StaticText(statusPanel, label="Debug Mode: On")
         self.statusText.SetForegroundColour("green")
+        self.connectionText = wx.StaticText(connectionPanel)
 
         # create HTML areas.
         self.infoHtml = wx.html.HtmlWindow(self)
         self.titleHtml = wx.html.HtmlWindow(self,
-                                            style=wx.html.HW_SCROLLBAR_NEVER)
+                                           style=wx.html.HW_SCROLLBAR_NEVER)
         self.sectionHtml = wx.html.HtmlWindow(self)
 
         # fill buttonbox
         bottomPanel.SetBackgroundColour(sectionbgcolor)
         self.statusText.SetBackgroundColour(sectionbgcolor)
         statusPanel.SetBackgroundColour(sectionbgcolor)
+        connectionPanel.SetBackgroundColour(sectionbgcolor)
         self.nextBtn = wx.Button(bottomPanel, wx.ID_FORWARD, size=(-1, 23),
                                  label='Continue')
-        buttonBox.Add(statusPanel, 2, flag=wx.EXPAND)
-        buttonBox.AddStretchSpacer(4)
+        buttonBox.Add(statusPanel, 2)
+        buttonBox.Add(connectionPanel, 6, flag=wx.EXPAND)
+        buttonBox.AddStretchSpacer(1)
         buttonBox.Add(bottomPanel, 0, flag=wx.ALIGN_RIGHT | wx.ALL | wx.EXPAND)
         buttonBox.AddStretchSpacer(1)
         self.SetBackgroundColour(sectionbgcolor)
@@ -327,6 +385,9 @@ class Script():
         # when spawned process returns, let us know.
         self.frame.Connect(-1, -1, EVT_SUBPROCESS_DONE, self.EndSubProcess)
 
+        # when there is a connection update, we should know that too
+        self.frame.Connect(-1, -1, EVT_CONNECTION_STATUS, self.SetConnection)
+
     def OnTutorial(self, e):
         if wx.MessageBox("Replace any currently-running script " + \
                          "with script-writing tips?",
@@ -374,6 +435,23 @@ class Script():
         self.frame.statusText.SetOwnForegroundColour("green" if self.debug \
                                                      else "red")
         self.ScriptLog("Debug Mode set to: " + str(self.debug))
+
+    def SetConnection(self, e):
+        status = e.status
+        text = e.text
+        if status == NO_CONNECTION:
+            self.frame.connectionText.SetLabel("USB:  Unique device not detected")
+            self.frame.connectionText.SetOwnForegroundColour("black")
+        elif status == ADB_CONNECTED:
+            self.frame.connectionText.SetLabel("ADB connection detected.  Device serial #: " + text)
+            self.frame.connectionText.SetOwnForegroundColour("green")
+        elif status == FASTBOOT_CONNECTED:
+            self.frame.connectionText.SetLabel("Fastboot connection detected: Device serial #" + text)
+            self.frame.connectionText.SetOwnForegroundColour("blue")
+        elif status == MULTIPLE_DEVICES_CONNECTED:
+            self.frame.connectionText.SetLabel("Multiple devices detected: " + text)
+            self.frame.connectionText.SetOwnForegroundColour("red")
+
 
     def OnOpen(self, e):
         filename = self.frame.OnOpen(e)
@@ -686,6 +764,11 @@ class Script():
             self.DoADB(["start-server"], True)
             self.updatedTools = True
             self.frame.openItem.Enable(True)
+            self.checkConnectionThread = CheckConnectionThread(
+                  os.path.join(toolsFolder, androidSdk[3], "platform-tools"), self.frame)
+#  NOTE:  This is temporary until v23 comes out, for testing purposes.  Push this back in when done.
+        self.checkConnectionThread = CheckConnectionThread(
+                  os.path.join(toolsFolder, androidSdk[3], "platform-tools"), self.frame)
 
     def VerifyHash(self, filename, theHash, algorithm):
         import hashlib
