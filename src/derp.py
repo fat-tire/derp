@@ -596,9 +596,9 @@ class Script():
             if self.subProcessThread.p != None:
                 if select.select([self.subProcessThread.p.stdout],
                                  [], [], 0.0)[0]:
-                    stdoutString = self.subProcessThread.p.stdout.read()
+                    stdoutString = self.subProcessThread.p.stdout.readline()
 
-                    self.ScriptLog("SUBPROCESS OUTPUT:\n" + stdoutString)
+                    self.ScriptLog("SUBPROCESS : " + stdoutString.rstrip('\n'))
                     self.processLog = self.processLog + stdoutString
             time.sleep(.25)
             wx.Yield()
