@@ -134,8 +134,8 @@ class CheckConnectionThread(Thread):
     def run(self):
         import time
         while 1 == 1:
-             self.bigloop()
-             time.sleep(2)
+            self.bigloop()
+            time.sleep(2)
 
     def doSubprocess(self, args):
         import subprocess
@@ -148,14 +148,14 @@ class CheckConnectionThread(Thread):
         wx.PostEvent(self.notifyclass, ConnectionUpdatedEvt(status, text))
 
     def bigloop(self):
-             adb_output = self.doSubprocess([os.path.join(self.cwd, "adb"), "get-state"])
-             if "device" in adb_output:
-                  self.sendUpdateEvent(ADB_CONNECTED, self.doSubprocess([os.path.join(self.cwd, "adb"), "get-serialno"]))
-             elif "fastboot" in self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]):
-                  fastboot_out = self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]).split("\t")
-                  self.sendUpdateEvent(FASTBOOT_CONNECTED, fastboot_out[0])
-             else:
-                  self.sendUpdateEvent(NO_CONNECTION, "Check your connection.")
+        adb_output = self.doSubprocess([os.path.join(self.cwd, "adb"), "get-state"])
+        if "device" in adb_output:
+            self.sendUpdateEvent(ADB_CONNECTED, self.doSubprocess([os.path.join(self.cwd, "adb"), "get-serialno"]))
+        elif "fastboot" in self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]):
+            fastboot_out = self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]).split("\t")
+            self.sendUpdateEvent(FASTBOOT_CONNECTED, fastboot_out[0])
+        else:
+            self.sendUpdateEvent(NO_CONNECTION, "Check your connection.")
 
 class LicenseFrame (wx.Frame):
 
@@ -340,7 +340,9 @@ class MainWindow (wx.Frame):
     def Notify(self, text):
         wx.MessageBox(text, "Attention", wx.OK)
 
-
+    def AcceptLicense(self):
+        return True
+    
 class Script():
 
     def __init__(self):
