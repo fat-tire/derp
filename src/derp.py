@@ -322,7 +322,7 @@ class MainWindow (wx.Frame):
         info.SetDescription("A cross-platform installer for " + \
                             "Android mobile devices (and more).")
         info.SetVersion(app_version)
-        info.AddDeveloper('fattire')
+        info.AddDeveloper('fattire (twitter: @fat__tire)')
         info.SetCopyright('(C) 2013 The developers of this program')
         info.SetLicence('The GNU Public License, Version 2')
         wx.AboutBox(info)
