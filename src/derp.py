@@ -68,7 +68,6 @@ elif platform.system() == "Linux":
                   "android-sdk-linux"]
     toolsFolder = os.path.join("/opt", app_name.lower(), "tools")
     downloadsFolder = os.path.join("/tmp", app_name.lower(), "downloads")
-    udevRules = ["/etc/udev/rules.d/", "99-android.rules"]
 
 # bash/python locations.  /bin/bash supposedly works w/Windows, but not sure about that. 
 bash = "/bin/bash"
@@ -782,17 +781,6 @@ class Script():
         self.DoSubProcess(command + scriptArgs)
 
     def UpdateTools(self):
-
-        # copy udev rules file if it doesn't exist already
-        # (but the directory for it does)
-        if platform.system() == "Linux" and os.path.isdir(udevRules[0]):
-            if not os.path.isfile(os.path.join(udevRules[0], udevRules[1])):
-                self.ScriptLog("Copying udev file:  " + udevRules[1] + \
-                               " to " + udevRules[0])
-                self.DoSubProcess(["cp", os.path.dirname( \
-                                os.path.join(os.path.realpath(__file__)), \
-                                "..", udevRules[1]), os.path.join(udevRules[0], \
-                                udevRules[1])])
 
         self.ScriptLog("ACTION  : Updating SDK Tools...")
         self.ScriptLog(" " * 10 + "Checking for SDK...")
