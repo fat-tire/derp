@@ -3,20 +3,20 @@ Upstream-Name: derp
 
 Files: src/*
 Copyright: 2013 fattire <fattire@gmail.com> & whomever else contributed
-License: GPL-2.0
+License: GPL-3.0
 
 Files: debian/*
 Copyright: 2013 fattire <f4ttire@gmail.com> & whomever else contributed
-License: GPL-2.0
+License: GPL-3.0
 
 Files: scripts/derp/welcome/welcome.derp, scripts/derp/tutorial/tutorial.derp
 Copyright: 2013 fattire <f4ttire@gmail.com> & contributors
-License: GPL-2.0
+License: GPL-3.0
 
-License: GPL-2.0
+License: GPL-3.0
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
- the Free Software Foundation; version 2 of the License.
+ the Free Software Foundation; version 3 of the License.
 
  This package is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,4 +27,4 @@ License: GPL-2.0
  along with this program. If not, see <http://www.gnu.org/licenses/>
  .
  On Debian systems, the complete text of the GNU General
- Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+ Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
