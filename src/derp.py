@@ -55,16 +55,16 @@ MULTIPLE_DEVICES_CONNECTED = 3
 
 # sdk locations
 if platform.system() == "Darwin":
-    androidSdk = ["http://dl.google.com/android/",
-                  "android-sdk_r21.1-macosx.zip",
-                  "ac2dc476c14ae60e85bc2d889cdab0ff17992891e0ed9107e651aaa86c18a1d3ff9df81fd6bd35c01b26010484fd67a84915f157749bce7a061c7fe4b789c405",
+    androidSdk = ["https://dl.google.com/android/",
+                  "android-sdk_r22-macosx.zip",
+                  "5baa219508d1f6fb4b1bfbcc53b07b07e3679c141fb4843628c8fabddac5080402f98b41ab81ca823ad27a2bd0e8c6fe3fccd6d8cd41d38e265e6f9478550fba",
                   "android-sdk-macosx"]
     toolsFolder = os.path.join("/Library", "Application Support", app_name, "tools")
     downloadsFolder = os.path.join("/Library", "Application Support", app_name, "downloads")
 elif platform.system() == "Linux":
-    androidSdk = ["http://dl.google.com/android/",
-                  "android-sdk_r21.1-linux.tgz",
-                  "160cd51f965a23120cf63abe02b9a9ce8913d1239a848bc423b33ad10eff65b30147c6b11ab751aa12154292ce0a7837aa60def1cd31a2ccb5d4fc6fcb6d2c24",
+    androidSdk = ["https://dl.google.com/android/",
+                  "android-sdk_r22-linux.tgz",
+                  "9beda1ae872dde3ca7884d1c389566ce2c8b511ef74d95bc9ddf53683445cc454f9a5a1871a80d5826083d98713040cb1b8b239a77a8eadf56daf30440c7108d",
                   "android-sdk-linux"]
     toolsFolder = os.path.join("/opt", app_name.lower(), "tools")
     downloadsFolder = os.path.join("/tmp", app_name.lower(), "downloads")
@@ -96,6 +96,8 @@ class SubProcessThread(Thread):
     def __init__(self, args, cwd, notify):
         Thread.__init__(self)
         self.args = args
+        # note: below allows subprocesses to be stopped mid-run
+        self.daemon = True
         self.notify = notify
         self.cwd = cwd
         self.start()
@@ -104,7 +106,7 @@ class SubProcessThread(Thread):
     def run(self):
         import subprocess
         self.p = subprocess.Popen(self.args, stderr=subprocess.STDOUT,
-                     stdout=subprocess.PIPE, cwd=self.cwd)
+                     stdout=subprocess.PIPE, stdin=subprocess.PIPE, cwd=self.cwd)
         self.p.wait()
         wx.PostEvent(self.notify, SubProcessDoneEvt(self.p))
 
@@ -172,6 +174,40 @@ class LicenseFrame (wx.Frame):
     def OnQuit(self, e):
         self.Destroy()
 
+class LicenseDlg (wx.Dialog):
+
+    def __init__(self, parent, id, title, theLicense):
+        dw, dh = wx.DisplaySize()
+        wx.Dialog.__init__(self, parent, id, title, size=(int(dw * 0.5), int(dh * 0.5)))
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        butsizer = wx.BoxSizer(wx.HORIZONTAL)
+        licenseText = wx.TextCtrl(self, style=wx.TE_MULTILINE)
+        licenseText.SetFont(wx.Font(family=wx.FONTFAMILY_TELETYPE,
+                             pointSize=12, style=wx.FONTSTYLE_NORMAL,
+                             weight=wx.FONTWEIGHT_NORMAL))
+        licenseText.SetValue(theLicense)
+        agreeButton = wx.Button(self, -1, 'I Agree')
+        quitButton = wx.Button(self, -1, "Quit " + app_name)
+        agreeButton.SetDefault()
+        sizer.Add(licenseText, 10, flag=wx.EXPAND)
+        sizer.AddStretchSpacer(1)
+        butsizer.AddStretchSpacer(1)
+        butsizer.Add(quitButton,1)
+        butsizer.AddStretchSpacer(1)
+        butsizer.Add(agreeButton,1)
+        butsizer.AddStretchSpacer(1)
+        sizer.Add(butsizer, 1,flag=wx.EXPAND)
+        sizer.AddStretchSpacer(1)
+        self.SetSizer(sizer)
+        self.EnableCloseButton(False)
+        self.Bind(wx.EVT_BUTTON, self.OnAccepted, agreeButton)
+        self.Bind(wx.EVT_BUTTON, self.OnQuit, quitButton)
+
+    def OnAccepted(self, e):
+        self.EndModal(True)
+
+    def OnQuit(self, e):
+        self.EndModal(False)
 
 class Console (wx.Frame):
 
@@ -324,7 +360,10 @@ class MainWindow (wx.Frame):
         info.SetVersion(app_version)
         info.AddDeveloper('fattire (twitter: @fat__tire)')
         info.SetCopyright('(C) 2013 The developers of this program')
-        info.SetLicence('The GNU Public License, Version 2')
+        info.SetLicence('Derp itself (this program) is open source and licensed under the The GNU Public License, Version 2,\n' +
+                        "which is viewable from the menu bar (View->License).\n\n" \
+                        "Note that the Android SDK and other command-line tools used by derp are licensed\n " + \
+                        "and downloaded separately, and by installing/using you must also agree to their terms.")
         wx.AboutBox(info)
 
     def OnOpen(self, event):
@@ -340,8 +379,9 @@ class MainWindow (wx.Frame):
     def Notify(self, text):
         wx.MessageBox(text, "Attention", wx.OK)
 
-    def AcceptLicense(self):
-        return True
+    def AcceptLicense(self, theLicense):
+        dlg = LicenseDlg(self, -1, "License", theLicense)
+        return dlg.ShowModal()
     
 class Script():
 
@@ -593,18 +633,49 @@ class Script():
         import time
         import select
 
+        """ Note-- if this is doing an updatetools, it will look for the
+        "Accept License" message from the SDK updater and present it
+        to the user to accept.  On non-updatetools funcitonality, all that
+        should be skipped """
+        licenseText = ""
         while self.subprocessRunning:
             wx.Yield()
+            stdoutString = ""
+
             if self.subProcessThread.p != None:
                 if select.select([self.subProcessThread.p.stdout],
                                  [], [], 0.0)[0]:
-                    stdoutString = self.subProcessThread.p.stdout.readline()
-
-                    self.ScriptLog("SUBPROCESS : " + stdoutString.rstrip('\n'))
-                    self.processLog = self.processLog + stdoutString
-            time.sleep(.25)
+                    if self.updatedTools == True:
+                        stdoutString = self.subProcessThread.p.stdout.readline()
+                    else:
+                    # the following is an "enhanced" readline() which will
+                    # identify the license agreement line so everything doesn't stop.
+                        stdoutString = ""
+                        while self.subprocessRunning == True:
+                            wx.Yield()
+                            char = self.subProcessThread.p.stdout.read(1)
+                            if char != "\n" and stdoutString[-7:] != " [y/n]:":
+                                stdoutString = stdoutString + char;
+                            else:
+                                self.processLog = self.processLog + stdoutString
+                                self.ScriptLog("SUBPROCESS : " + stdoutString.rstrip('\n'))
+                                break
+                    if self.updatedTools == False:
+                        if stdoutString[:11] == "License id:":
+                            licenseText = ""  #start new license
+                        # always build to the license, just in case.
+                        if "Do you accept the license " in stdoutString:
+                            if self.frame.AcceptLicense(licenseText):
+                                self.subProcessThread.p.communicate("yes\n")
+                                self.ScriptLog("SDK License accepted.")
+                            else:
+                                self.ScriptLog("SDK License rejected.  Quitting " + app_name + " now.")
+                                sys.exit()
+                        licenseText = licenseText + stdoutString + "\n"
+            time.sleep(.01)
             wx.Yield()
             self.frame.activityBar.Pulse()
+
         # get anything left in the pipe after process stops...
         try:
             if select.select([self.subProcessThread.p.stdout],
@@ -766,10 +837,7 @@ class Script():
             self.updatedTools = True
             self.frame.openItem.Enable(True)
             self.checkConnectionThread = CheckConnectionThread(
-                  os.path.join(toolsFolder, androidSdk[3], "platform-tools"), self.frame)
-#  NOTE:  This is temporary until v23 comes out, for testing purposes.  Push this back in when done.
-        self.checkConnectionThread = CheckConnectionThread(
-                  os.path.join(toolsFolder, androidSdk[3], "platform-tools"), self.frame)
+                os.path.join(toolsFolder, androidSdk[3], "platform-tools"), self.frame)
 
     def VerifyHash(self, filename, theHash, algorithm):
         import hashlib
