@@ -55,7 +55,7 @@ Press <b>Continue</b> when you've copied the HTC Token and are prepared to paste
 import subprocess
 from subprocess import Popen, PIPE
 
-command=[toolsFolder + androidSdk[3] + "platform-tools/fastboot", "oem", "get_identifier_token"]
+command=[os.path.join(toolsFolder, androidSdk[3], "platform-tools", "fastboot"), "oem", "get_identifier_token"]
 
 gotToken = False
 
@@ -115,7 +115,7 @@ while unlocked == False:
         unlockbinfile=dlg.GetPath()
 	dlg.Destroy()
         self.ScriptLog("UNLOCK file is at:" +  str(unlockbinfile))
-        command=[toolsFolder + androidSdk[3] + "platform-tools/fastboot", "flash", "unlocktoken", unlockbinfile]
+        command=[os.path.join(toolsFolder, androidSdk[3], "platform-tools", "fastboot"), "flash", "unlocktoken", unlockbinfile]
         self.ScriptLog("Trying:  " + " ".join(command))
         process = Popen(command, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         output = []
