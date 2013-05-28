@@ -17,9 +17,9 @@
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://get.cm/get/jenkins/27675/cm-10.1-20130511-NIGHTLY-m7.zip"
-                        sha512="ad3ccda243dc976c7fddf50cb549c047b6e44bd59077d31cdee4a45ba51a185b107635c5495d4f330cf902b92963819d104ab832c09e3e72e4e88e0d85fb2cd0"
-                        local_name="cm-10.1-20130511-NIGHTLY-m7.zip"/>
+                <file   url="http://get.cm/get/jenkins/29252/cm-10.1-20130527-NIGHTLY-m7.zip"
+                        md5="2aab21c4a14b5be1e35868c803890a8c"
+                        local_name="cm-10.1-20130527-NIGHTLY-m7.zip"/>
                 <file   local_name="recovery.img"
                         url="https://dl.dropboxusercontent.com/u/4008482/Derp/recovery-clockwork-6.0.3.2-m7.img"
                         md5="b1e59faf83545478e0c1cb17fecec248"/>
@@ -41,8 +41,8 @@
 <li>Select your device from the pull-down menu. You may not see the HTC One listed.  In that case, select <b>All Other Supported Models</b>.  Then select <b>Begin Unlock Bootloader</b>.</li>
 <li>Agree to the <b>Are you sure you wish to continue?</b> box and then you'll be prompted to agree to the legal terms.</li>
 <li>If you agree to the fact you are voiding your phone's warranty, click both check boxes and select <b>Proceed to the unlocking instructions</b>.</li>
-<li>Follow the web site instructions to reboot your phone into bootloader mode and then select the <b>fastboot</b> option. (You do not need to download the Google SDK or any other software, as derp will do this for you.)</li>
-<li>When you get to Step 5 in the web site instructions, press <b>Continue</b> below.</li>
+<li>Follow the web site instructions to <b>reboot your phone into bootloader mode and then select the <b>fastboot</b> option</b>. (You do not need to download the Google SDK or any other software, as derp will do this for you.)</li>
+<li>When you get to Step 5 in the web site instructions, and you are in bootloader/fastboot mode (<font color="blue">indicated by a blue notice at the bottom of these instructions</font>), press <b>Continue</b> below.</li>
 </ol>
 
 </info>
@@ -192,7 +192,7 @@ As you did previously, restart the device holding down the volume key and then m
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1-20130511-NIGHTLY-m7.zip</arg>
+				<arg>cm-10.1-20130527-NIGHTLY-m7.zip</arg>
 				<arg>/data/media/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -205,7 +205,7 @@ As you did previously, restart the device holding down the volume key and then m
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
- 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130511-NIGHTLY-m7.zip" >> /cache/recovery/command</arg>
+ 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130527-NIGHTLY-m7.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">
