@@ -739,7 +739,7 @@ class Script():
                          [], [], 0.0)[0]:
                 stdoutString = self.subProcessThread.p.stdout.read()
                 for line in stdoutString.split("\n"):
-                    self.ScriptLog("SUBPROCESS: " + line)
+                    self.ScriptLog("SUBPROCESS: " + line.rstrip())
                 self.processLog = self.processLog + line + "\n"
         except:
             pass
