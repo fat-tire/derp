@@ -14,31 +14,45 @@ BE WARY OF RUNNING UNTRUSTED SCRIPTS AS IT WILL HAVE FULL
 ACCESS TO YOUR COMPUTER AND DEVICES.  SEE THE LICENSE FOR
 DISCLAIMERS AND REMEMBER YOU RUN AT YOUR OWN RISK ***
 
+Derp is an experimental cross-platform installer for doing neat stuff.
+Right now, it's still experimental, so don't run it on important
+computers or devices.  In fact, unless you're a developer, you're
+advised to not run it at all.
 
-For right now, it's not even worth describing what DERP
-is in too much detail, as it's still new and experimental
-and potentially dangerous and you probably shouldn't use it.
+Note that right now, uninstalling Derp will *not* auto-remove the Android SDK.
+
+See the included Tutorial, FAQs, and other documentation, available from within
+Derp itself for help on using Derp and writing .derp scripts.
 
 
 BUILDING DERP
 
+You'll need Python 2.7 or so and wxwidgets installed onto any computer
+used to build DERP.  Additionally you'll need a toolchain.
 
-You'll need Python 2.7 or so and wxwidgets installed on any computer
-that you wish to build DERP.  On mac, wxwidgets 2.9 or higher is needed.
+--DEBIAN/UBUNTU/MINT--
 
-Additionally you'll need a toolchain installed.  For debian, you need the
-usual .deb-making tools.
+For debian-based Linux, you need the usual .deb-making tools.  Something
+like this should get you started:
+
+sudo apt-get install make build-essential devscripts python-all debhelper python-wxgtk2.8
+
+--MAC OS X--
+
+On mac, wxwidgets 2.9 or higher (for cocoa) is required.  You can use Xcode or install
+the toolchain yourself from http://gcc.gnu.org/ or a prepackaged source.
+
 
 More info will have to follow later.  Essentially, though.... to build:
 
-
 make debian -- makes a debian .deb for installation
-make mac    -- makes a mac .app 
+make mac    -- makes a mac .app  (only tested in Snow Leopard)
 
 
-To run from the main source directory:
+RUNNING FROM THE DIRECTORY:
+
+To run from the main source directory (in Linux), cd to the /derp directory, then:
 
 sudo python src/derp.py
 
 
-   --fattire
