@@ -51,7 +51,6 @@ scriptFolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "
 NO_CONNECTION              = 0
 ADB_CONNECTED              = 1
 FASTBOOT_CONNECTED         = 2
-MULTIPLE_DEVICES_CONNECTED = 3
 
 # sdk locations
 if platform.system() == "Darwin":
@@ -214,10 +213,28 @@ class Console (wx.Frame):
         dw, dh = wx.DisplaySize()
         wx.Frame.__init__(self, parent, title="Console", size=(int(dw * 0.8), int(dh * 0.8)))
         # define the console
+        controlSizer = wx.BoxSizer(wx.VERTICAL)
         self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.control.SetFont(wx.Font(family=wx.FONTFAMILY_TELETYPE,
                              pointSize=12, style=wx.FONTSTYLE_NORMAL,
                              weight=wx.FONTWEIGHT_NORMAL))
+        self.adbLabel = wx.StaticText(self, -1, " adb:")
+        self.adbLabel.SetFont(wx.Font(pointSize=14, family = wx.FONTFAMILY_DEFAULT,
+                             style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_BOLD))
+        self.fbLabel = wx.StaticText(self, -1, " fastboot:")
+        self.fbLabel.SetFont(wx.Font(pointSize=14, family = wx.FONTFAMILY_DEFAULT,
+                             style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_BOLD))
+        self.adbText = wx.TextCtrl(self, -1, "shell ls -la", size=(dw * 0.5,-1), style=wx.TE_PROCESS_ENTER)
+        self.adbText.SetInsertionPoint(0)
+        self.fbText = wx.TextCtrl(self, -1, "devices", size = (dw * 0.5, -1), style=wx.TE_PROCESS_ENTER)
+        self.fbText.SetInsertionPoint(0)
+        self.fbText.Disable()
+        self.adbText.Disable()
+        sizer= wx.FlexGridSizer(cols=2, hgap=6, vgap=6)
+        sizer.AddMany([self.adbLabel, self.adbText, self.fbLabel, self.fbText])
+        controlSizer.Add(self.control, 10, flag=wx.EXPAND)
+        controlSizer.Add(sizer, 1, flag=wx.EXPAND)
+        self.SetSizer(controlSizer)
         self.UpdateLog(text)
         self.Centre()
 #       Green's not working for mac, so comment out for now.
@@ -381,7 +398,7 @@ class MainWindow (wx.Frame):
     def AcceptLicense(self, theLicense):
         dlg = LicenseDlg(self, -1, "License", theLicense)
         return dlg.ShowModal()
-    
+
 class Script():
 
     def __init__(self):
@@ -410,6 +427,9 @@ class Script():
         self.frame.Bind(wx.EVT_MENU, self.OnLicense, self.frame.licenseItem)
         self.frame.Bind(wx.EVT_MENU, self.OnTutorial, self.frame.tutorialItem)
 
+        self.console.Bind(wx.EVT_TEXT_ENTER, self.OnConsoleADB, self.console.adbText)
+        self.console.Bind(wx.EVT_TEXT_ENTER, self.OnConsoleFB, self.console.fbText)
+
         # make tools/downloads directories
         if not os.path.exists(toolsFolder):
             os.makedirs(toolsFolder)
@@ -426,6 +446,16 @@ class Script():
 
         # when there is a connection update, we should know that too
         self.frame.Connect(-1, -1, EVT_CONNECTION_STATUS, self.SetConnection)
+
+    def OnConsoleADB(self, e):
+        self.ScriptLog("Manually entered ADB command...")
+        self.DoADB(self.console.adbText.GetValue().split(" "), True)
+        self.console.adbText.SetValue("")
+
+    def OnConsoleFB(self, e):
+        self.ScriptLog("Manually entered fastboot command...")
+        self.DoFastboot(self.console.fbText.GetValue().split(" "))
+        self.console.fbText.SetValue("")
 
     def OnTutorial(self, e):
         if wx.MessageBox("Replace any currently-running script " + \
@@ -462,9 +492,12 @@ class Script():
         try:
             self.console.Show(not self.console.IsShown())
             self.console.Raise()
+
         except:
             # console was closed, so recreate it
             self.console = Console(None, "Console", self.log)
+            self.console.Bind(wx.EVT_TEXT_ENTER, self.OnConsoleADB, self.console.adbText)
+            self.console.Bind(wx.EVT_TEXT_ENTER, self.OnConsoleFB, self.console.fbText)
             self.console.Show(not self.console.IsShown())
 
     def OnDebug(self, e):
@@ -481,16 +514,37 @@ class Script():
         if status == NO_CONNECTION:
             self.frame.connectionText.SetLabel("USB:  Unique device not detected")
             self.frame.connectionText.SetOwnForegroundColour("black")
+            try:
+                self.console.adbText.Disable()
+                self.console.fbText.Disable()
+                self.console.adbLabel.SetOwnForegroundColour("black")
+                self.console.fbLabel.SetOwnForegroundColour("black")
+            except:
+                pass
         elif status == ADB_CONNECTED:
             self.frame.connectionText.SetLabel("ADB connection detected.  Device serial #: " + text)
             self.frame.connectionText.SetOwnForegroundColour("green")
+            try:
+                if self.subprocessRunning:
+                    self.console.adbText.Disable()
+                    self.console.adbLabel.SetOwnForegroundColour("black")
+                else:
+                    self.console.adbText.Enable()
+                    self.console.adbLabel.SetOwnForegroundColour("green")
+            except:
+                pass
         elif status == FASTBOOT_CONNECTED:
             self.frame.connectionText.SetLabel("Fastboot connection detected: Device serial #" + text)
             self.frame.connectionText.SetOwnForegroundColour("blue")
-        elif status == MULTIPLE_DEVICES_CONNECTED:
-            self.frame.connectionText.SetLabel("Multiple devices detected: " + text)
-            self.frame.connectionText.SetOwnForegroundColour("red")
-
+            try:
+                if self.subprocessRunning:
+                    self.console.fbText.Disable()
+                    self.console.fbLabel.SetOwnForegroundColour("black")
+                else:
+                    self.console.fbText.Enable()
+                    self.console.fbLabel.SetOwnForegroundColour("blue")
+            except:
+                pass
 
     def OnOpen(self, e):
         filename = self.frame.OnOpen(e)
@@ -566,11 +620,11 @@ class Script():
                 self.ScriptLog(
             "Warning: bash scripts exist without specifying operating system.")
                 self.frame.Notify(
-      """Warning:  This script contains bash scripts without specifying """ + \
-      """ the operating system (via the "os" attribute).\n\nThis is """ + \
-      """ discouraged, as the script will run on ALL operating systems """ + \
-      """(some of which may not actually support bash).  The script will """ + \
-      """now start.  This notice was just a warning.""")
+      "Warning:  This script contains bash scripts without specifying " + \
+      'the operating system (via the "os" attribute).\n\nThis is ' + \
+      " discouraged, as the script will run on ALL operating systems " + \
+      "(some of which may not actually support bash).  The script will " + \
+      "now start.  This notice was just a warning.")
                 sawWarning = True
         return True
 
@@ -665,8 +719,8 @@ class Script():
                         # always build to the license, just in case.
                         if "Do you accept the license " in stdoutString:
                             if self.frame.AcceptLicense(licenseText):
+                                self.ScriptLog("SDK License accepted.  Standby...")
                                 self.subProcessThread.p.communicate("yes\n")
-                                self.ScriptLog("SDK License accepted.")
                             else:
                                 self.ScriptLog("SDK License rejected.  Quitting " + app_name + " now.")
                                 sys.exit()
