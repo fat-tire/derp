@@ -48,9 +48,9 @@ app_version = "0.001"
 scriptFolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scripts/")
 
 # adb/fastboot modes
-NO_CONNECTION              = 0
-ADB_CONNECTED              = 1
-FASTBOOT_CONNECTED         = 2
+NO_CONNECTION = 0
+ADB_CONNECTED = 1
+FASTBOOT_CONNECTED = 2
 
 # sdk locations
 if platform.system() == "Darwin":
@@ -191,11 +191,11 @@ class LicenseDlg (wx.Dialog):
         sizer.Add(licenseText, 10, flag=wx.EXPAND)
         sizer.AddStretchSpacer(1)
         butsizer.AddStretchSpacer(1)
-        butsizer.Add(quitButton,1)
+        butsizer.Add(quitButton, 1)
         butsizer.AddStretchSpacer(1)
-        butsizer.Add(agreeButton,1)
+        butsizer.Add(agreeButton, 1)
         butsizer.AddStretchSpacer(1)
-        sizer.Add(butsizer, 1,flag=wx.EXPAND)
+        sizer.Add(butsizer, 1, flag=wx.EXPAND)
         sizer.AddStretchSpacer(1)
         self.SetSizer(sizer)
         self.EnableCloseButton(False)
@@ -220,18 +220,18 @@ class Console (wx.Frame):
                              pointSize=12, style=wx.FONTSTYLE_NORMAL,
                              weight=wx.FONTWEIGHT_NORMAL))
         self.adbLabel = wx.StaticText(self, -1, " adb:")
-        self.adbLabel.SetFont(wx.Font(pointSize=14, family = wx.FONTFAMILY_DEFAULT,
+        self.adbLabel.SetFont(wx.Font(pointSize=14, family=wx.FONTFAMILY_DEFAULT,
                              style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_BOLD))
         self.fbLabel = wx.StaticText(self, -1, " fastboot:")
-        self.fbLabel.SetFont(wx.Font(pointSize=14, family = wx.FONTFAMILY_DEFAULT,
+        self.fbLabel.SetFont(wx.Font(pointSize=14, family=wx.FONTFAMILY_DEFAULT,
                              style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_BOLD))
-        self.adbText = wx.TextCtrl(self, -1, "shell ls -la", size=(dw * 0.5,-1), style=wx.TE_PROCESS_ENTER)
+        self.adbText = wx.TextCtrl(self, -1, "shell ls -la", size=(dw * 0.5, -1), style=wx.TE_PROCESS_ENTER)
         self.adbText.SetInsertionPoint(0)
-        self.fbText = wx.TextCtrl(self, -1, "devices", size = (dw * 0.5, -1), style=wx.TE_PROCESS_ENTER)
+        self.fbText = wx.TextCtrl(self, -1, "devices", size=(dw * 0.5, -1), style=wx.TE_PROCESS_ENTER)
         self.fbText.SetInsertionPoint(0)
         self.fbText.Disable()
         self.adbText.Disable()
-        sizer= wx.FlexGridSizer(cols=2, hgap=6, vgap=6)
+        sizer = wx.FlexGridSizer(cols=2, hgap=6, vgap=6)
         sizer.AddMany([self.adbLabel, self.adbText, self.fbLabel, self.fbText])
         controlSizer.Add(self.control, 10, flag=wx.EXPAND)
         controlSizer.Add(sizer, 1, flag=wx.EXPAND)
@@ -248,8 +248,8 @@ class Console (wx.Frame):
         self.control.ShowPosition(self.control.GetLastPosition())
 
     def AppendLog(self, text):
-       self.control.AppendText(text)
-       self.control.ShowPosition(self.control.GetLastPosition())
+        self.control.AppendText(text)
+        self.control.ShowPosition(self.control.GetLastPosition())
 
     def OnQuit(self, e):
         self.Destroy()
@@ -381,7 +381,7 @@ class MainWindow (wx.Frame):
         info.SetVersion(app_version)
         info.AddDeveloper('fattire (twitter: @fat__tire)')
         info.SetCopyright('(C) 2013 The developers of this program')
-        info.SetLicence('Derp itself (this program) is open source and licensed under the The GNU Public License, Version 2,\n' +
+        info.SetLicence('Derp itself (this program) is open source and licensed under the The GNU Public License, Version 2,\n' + 
                         "which is viewable from the menu bar (View->License).\n\n" \
                         "Note that the Android SDK and other command-line tools used by derp are licensed\n " + \
                         "and downloaded separately, and by installing/using you must also agree to their terms.")
@@ -720,7 +720,7 @@ class Script():
                                 break
                     if self.updatedTools == False:
                         if stdoutString[:11] == "License id:":
-                            licenseText = ""  #start new license
+                            licenseText = ""  # start new license
                         # always build to the license, just in case.
                         if "Do you accept the license " in stdoutString:
                             if self.frame.AcceptLicense(licenseText):
@@ -947,7 +947,7 @@ class Script():
         else:
             attempt = 1
             while attempt < 5:
-                self.DoSubProcess(["curl", "-sLo" + os.path.join(downloadsFolder, 
+                self.DoSubProcess(["curl", "-sLo" + os.path.join(downloadsFolder,
                                    filetag.get("local_name")),
                                    filetag.get("url")])
                 attempt += 1
