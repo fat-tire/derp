@@ -167,6 +167,7 @@ class LicenseFrame (wx.Frame):
                              pointSize=12, style=wx.FONTSTYLE_NORMAL,
                              weight=wx.FONTWEIGHT_NORMAL))
         self.control.SetValue(text)
+        self.control.SetEditable(False)
         self.Centre()
 
     def OnQuit(self, e):
@@ -236,6 +237,7 @@ class Console (wx.Frame):
         controlSizer.Add(sizer, 1, flag=wx.EXPAND)
         self.SetSizer(controlSizer)
         self.UpdateLog(text)
+        self.control.SetEditable(False)
         self.Centre()
 #       Green's not working for mac, so comment out for now.
 #       self.control.SetBackgroundColour("black")
@@ -243,8 +245,11 @@ class Console (wx.Frame):
 
     def UpdateLog(self, text):
         self.control.SetValue(text)
-        self.LineDown()
         self.control.ShowPosition(self.control.GetLastPosition())
+
+    def AppendLog(self, text):
+       self.control.AppendText(text)
+       self.control.ShowPosition(self.control.GetLastPosition())
 
     def OnQuit(self, e):
         self.Destroy()
@@ -632,7 +637,7 @@ class Script():
         print app_name + ": " + text
         self.log += text.decode('utf-8') + "\n"
         if self.console:
-            self.console.UpdateLog(self.log)
+            self.console.AppendLog(text.decode('utf-8') + "\n")
 
     def BuildSectionList(self):
 
@@ -683,7 +688,6 @@ class Script():
         self.WaitForProcess()
 
     def WaitForProcess(self):
-        import time
         import select
 
         """ Note-- if this is doing an updatetools, it will look for the
@@ -700,6 +704,7 @@ class Script():
                                  [], [], 0.0)[0]:
                     if self.updatedTools == True:
                         stdoutString = self.subProcessThread.p.stdout.readline()
+                        self.ScriptLog("SUBPROCESS: " + stdoutString.rstrip('\n'))
                     else:
                     # the following is an "enhanced" readline() which will
                     # identify the license agreement line so everything doesn't stop.
@@ -725,7 +730,6 @@ class Script():
                                 self.ScriptLog("SDK License rejected.  Quitting " + app_name + " now.")
                                 sys.exit()
                         licenseText = licenseText + stdoutString + "\n"
-            time.sleep(.01)
             wx.Yield()
             self.frame.activityBar.Pulse()
 
@@ -734,8 +738,9 @@ class Script():
             if select.select([self.subProcessThread.p.stdout],
                          [], [], 0.0)[0]:
                 stdoutString = self.subProcessThread.p.stdout.read()
-                self.ScriptLog(stdoutString)
-                self.processLog = self.processLog + stdoutString
+                for line in stdoutString.split("\n"):
+                    self.ScriptLog("SUBPROCESS: " + line)
+                self.processLog = self.processLog + line + "\n"
         except:
             pass
         self.CheckForExpectedString()
