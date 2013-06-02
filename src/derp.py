@@ -25,20 +25,20 @@ import xml.etree.ElementTree as ET
 from threading import Thread
 
 if sys.version_info < (2, 7):
-    print "This program requires python version 2.7 or higher."
+    print ("This program requires python version 2.7 or higher.")
     sys.exit(1)
 
 try:
     import wx.html
 except ImportError:
-    print '''This program requires wxpython.  On Debian-based Linux, including
+    print ('''This program requires wxpython.  On Debian-based Linux, including
     Ubuntu and Mint, you can install it with the following command:\n\n
-    sudo apt-get install python-wxgtk2.8\n'''
+    sudo apt-get install python-wxgtk2.8\n''')
     sys.exit(1)
 
 if wx.MAJOR_VERSION == 2:
     if wx.MINOR_VERSION < 9 and platform.system() == "Darwin":
-        print "The Mac needs at least wxWidgets version 2.9 (cocoa).  Sorry."
+        print ("The Mac needs at least wxWidgets version 2.9 (cocoa).  Sorry.")
         exit(1)
 
 # CONSTANTS & PLATFORM STUFF
@@ -635,7 +635,7 @@ class Script():
         return True
 
     def ScriptLog(self, text):
-        print app_name + ": " + text
+        print (app_name + ": " + text)
         self.log += text.decode('utf-8') + "\n"
         if self.console:
             self.console.AppendLog(text.decode('utf-8') + "\n")
