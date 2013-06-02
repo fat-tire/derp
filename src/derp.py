@@ -382,7 +382,7 @@ class MainWindow (wx.Frame):
         info.SetVersion(app_version)
         info.AddDeveloper('fattire (twitter: @fat__tire)')
         info.SetCopyright('(C) 2013 The developers of this program')
-        info.SetLicence('Derp itself (this program) is open source and licensed under the The GNU Public License, Version 2,\n' + 
+        info.SetLicence('Derp itself (this program) is open source and licensed under the The GNU Public License, Version 3,\n' + 
                         "which is viewable from the menu bar (View->License).\n\n" \
                         "Note that the Android SDK and other command-line tools used by derp are licensed\n " + \
                         "and downloaded separately, and by installing/using you must also agree to their terms.")
