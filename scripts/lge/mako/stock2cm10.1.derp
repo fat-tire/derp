@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<derp device_codename="mako" os="Linux Darwin" device_name="Nexus 4" device_vendor="lge" app_version="0.001" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" title="CM10.1-RC2 for Mako" license="GPLv2">
+<derp device_codename="mako" os="Linux Darwin" device_name="Nexus 4" device_vendor="lge" app_version="0.001" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" title="CM10.1-RC4 for Mako" license="GPLv3">
 	
 	<section name="Introduction">
 		<step name="The Nexus 4">
@@ -18,9 +18,9 @@
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://www.get.cm/get/jenkins/27612/cm-10.1.0-RC2-mako.zip"
-                        sha512="d5415a4bd878f7ba981f074a019affa8c6d3541e7ae4288987266a0243f5ec55a589f19effee12b3685def9099fed31999cb2619565033bc826bd0aaa1801a78"
-                        local_name="cm-10.1.0-RC2-mako.zip"/>
+                <file   url="http://get.cm/get/jenkins/29767/cm-10.1.0-RC4-mako.zip"
+                        sha512="56c81009a510a5a550b0ce07c49e7baaeff7b1fd765f925eff45059688fce422e6e2fdc691cedf01ddf2a3e0dd6ff8f6e75245e723d6d7e1856f4cca8fefe008"
+                        local_name="cm-10.1.0-RC4-mako.zip"/>
                 <file   local_name="recovery.img"
                         url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.3.1-mako.img"
                         md5="28156448103f241d80fb517b03144389"/>
@@ -137,7 +137,7 @@
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1.0-RC2-mako.zip</arg>
+				<arg>cm-10.1.0-RC4-mako.zip</arg>
 				<arg>/data/media/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -150,7 +150,7 @@
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
- 			<arg>echo "--update_package=/data/media/derp/cm-10.1.0-RC2-mako.zip" >> /cache/recovery/command</arg>
+			<arg>echo "--update_package=/data/media/derp/cm-10.1.0-RC4-mako.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">
