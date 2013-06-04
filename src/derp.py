@@ -55,15 +55,15 @@ FASTBOOT_CONNECTED = 2
 # sdk locations
 if platform.system() == "Darwin":
     androidSdk = ["https://dl.google.com/android/",
-                  "android-sdk_r22-macosx.zip",
-                  "5baa219508d1f6fb4b1bfbcc53b07b07e3679c141fb4843628c8fabddac5080402f98b41ab81ca823ad27a2bd0e8c6fe3fccd6d8cd41d38e265e6f9478550fba",
+                  "android-sdk_r22.0.1-macosx.zip",
+                  "df6711dd3251d619f5f8a6c7674a703ba7b35cf6ff4eb877dd9e83d314ab1800e6e3e70be062255b429a639b1c76a9603360fa062c30d8d62558221a83bee76f",
                   "android-sdk-macosx"]
     toolsFolder = os.path.join("/Library", "Application Support", app_name, "tools")
     downloadsFolder = os.path.join("/Library", "Application Support", app_name, "downloads")
 elif platform.system() == "Linux":
     androidSdk = ["https://dl.google.com/android/",
-                  "android-sdk_r22-linux.tgz",
-                  "9beda1ae872dde3ca7884d1c389566ce2c8b511ef74d95bc9ddf53683445cc454f9a5a1871a80d5826083d98713040cb1b8b239a77a8eadf56daf30440c7108d",
+                  "android-sdk_r22.0.1-linux.tgz",
+                  "7c97ba8daf4a1b8b6e422d8fca21a5e23f3a5e92d769e13ab5e649a967f2662c71ae201a6c1d40202bda98c4fb80eaa60a3ff5e4af9f613cfab1366f63774ac7",
                   "android-sdk-linux"]
     toolsFolder = os.path.join("/opt", app_name.lower(), "tools")
     downloadsFolder = os.path.join("/tmp", app_name.lower(), "downloads")
