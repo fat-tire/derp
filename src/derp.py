@@ -895,13 +895,36 @@ class Script():
                 self.frame.infoText.SetLabel("Download error!")
                 self.ScriptLog("Download error: " + str(sys.exc_info()[0]))
             self.isDownloading = False
+            self.frame.infoText.SetLabel("Verifying Tools file...")
+            self.frame.infoText.Update()
+            if self.VerifyHash(os.path.join(toolsFolder, androidSdk[1]), androidSdk[2], "sha512"):
+                self.frame.infoText.SetLabel("Extracting Tools...")
+                self.ScriptLog("Extracting tools from archive...")
+                self.frame.infoText.Update()
+                if androidSdk[1].lower().endswith(".tgz"):
+                    import tarfile
+                    try:
+                        mytar = tarfile.open(os.path.join(toolsFolder, androidSdk[1]))
+                        mytar.extractall(toolsFolder)
+                    except:
+                        self.ScriptLog("Unexpected error untarring file.")
+                elif androidSdk[1].lower().endswith(".zip"):
+                    import zipfile
+                    import stat
+                    try:
+                        myzip = zipfile.ZipFile(os.path.join(toolsFolder, androidSdk[1]), 'r')
+                        myzip.extractall(toolsFolder)
+                        # for some reason permission not set on mac
+                        os.chmod(os.path.join(toolsFolder, androidSdk[3], "tools", "android"),
+                             os.stat(os.path.join(toolsFolder, androidSdk[3], "tools", "android")).st_mode \
+                             | stat.S_IXUSR)
+                    except:
+                        self.ScriptLog("Unexpected error unzipping file.")
+                self.ScriptLog("Done extracting tools!")
             self.frame.nextBtn.Enable()
             self.frame.activityBar.Hide()
             self.frame.progressBar.Hide()
             self.frame.Layout()
-            if self.VerifyHash(os.path.join(toolsFolder, androidSdk[1]), androidSdk[2], "sha512"):
-                self.DoSubProcess(["tar", "-C" + toolsFolder, "-xvf" + 
-                                   os.path.join(toolsFolder, androidSdk[1])])
             attempt += 1
             if attempt == 6:
                 self.ScriptLog("Tried to download the tools 5 times.  Failed.")
@@ -921,13 +944,25 @@ class Script():
             self.ScriptLog("Previous SDK found.  No need to get it again!")
 
         if os.access(os.path.join(toolsFolder, androidSdk[3], "tools", "android"), os.X_OK):
+            import stat
             self.DoSubProcess([os.path.join(toolsFolder, androidSdk[3], "tools", "android"), \
                             "update", "sdk", \
                             "--no-ui", "--filter", "platform-tool, tool"])
             self.DoSubProcess([os.path.join(toolsFolder, androidSdk[3], "tools", "android"), \
                                "update", "adb"])
-            self.DoSubProcess(["chmod", "-R", "a-w", toolsFolder])
-            self.DoSubProcess(["chmod", "-R", "a-w", downloadsFolder])
+            # Make everything in tools/downloads world read-only so users can't change it.
+            for dirpath, dirs, files in os.walk(toolsFolder):
+                for afile in files:
+                    thing=os.path.join(dirpath, afile)
+                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWUSR)
+                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWGRP)
+                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWOTH)
+            for dirpath, dirs, files in os.walk(downloadsFolder):
+                for afile in files:
+                    thing=os.path.join(dirpath, afile)
+                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWUSR)
+                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWGRP)
+                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWOTH)
             self.DoADB(["kill-server"], True)
             self.DoADB(["start-server"], True)
             self.updatedTools = True
