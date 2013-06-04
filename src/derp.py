@@ -229,10 +229,13 @@ class Console (wx.Frame):
         self.adbText.SetInsertionPoint(0)
         self.fbText = wx.TextCtrl(self, -1, "devices", size=(dw * 0.5, -1), style=wx.TE_PROCESS_ENTER)
         self.fbText.SetInsertionPoint(0)
+        self.adbNote = wx.StaticText(self, -1, label="NOTE:  Single, NON-INTERACTIVE commands only!")
+        self.fbNote = wx.StaticText(self, -1, label="NOTE:  Single, NON-INTERACTIVE commands only!")
+
         self.fbText.Disable()
         self.adbText.Disable()
-        sizer = wx.FlexGridSizer(cols=2, hgap=6, vgap=6)
-        sizer.AddMany([self.adbLabel, self.adbText, self.fbLabel, self.fbText])
+        sizer = wx.FlexGridSizer(cols=3, hgap=6, vgap=6)
+        sizer.AddMany([self.adbLabel, self.adbText, self.adbNote, self.fbLabel, self.fbText, self.fbNote])
         controlSizer.Add(self.control, 50, flag=wx.EXPAND)
         controlSizer.AddStretchSpacer(1)
         controlSizer.Add(sizer, 5, flag=wx.EXPAND)
@@ -287,6 +290,8 @@ class MainWindow (wx.Frame):
         self.FAQItem = self.helpMenu.Append(wx.ID_ANY, "&FAQ", "View FAQ")
         self.licenseItem = self.viewMenu.Append(wx.ID_ANY, "&License",
                                                 "View License")
+        self.FAQItem.Enable(False)
+        self.tutorialItem.Enable(False)
 
         self.fileMenu.AppendSeparator()
         self.quitItem = self.fileMenu.Append(wx.ID_EXIT, "&Exit", "Exit")
@@ -335,6 +340,13 @@ class MainWindow (wx.Frame):
         self.nextBtn.SetFocus()
 
         # progress bar
+        self.progressBar = wx.Panel(self, -1)
+        self.infoText = wx.StaticText(self.progressBar)
+        self.infoText.SetFont(wx.Font(family=wx.FONTFAMILY_TELETYPE,
+                     pointSize=12, style=wx.FONTSTYLE_NORMAL,
+                     weight=wx.FONTWEIGHT_BOLD))
+        self.progressBar.SetBackgroundColour(sectionbgcolor)
+        self.progressBar.Hide()
         self.activityBar = wx.Gauge(self, wx.ID_ANY)
         self.activityBar.Hide()
 
@@ -342,6 +354,7 @@ class MainWindow (wx.Frame):
         self.infoBox.AddStretchSpacer(1)
         self.infoBox.Add(self.titleHtml, 3, wx.EXPAND)
         self.infoBox.Add(self.infoHtml, 20, wx.EXPAND)
+        self.infoBox.Add(self.progressBar, 1, wx.EXPAND)
         self.infoBox.Add(self.activityBar, 1, wx.EXPAND)
         self.infoBox.AddStretchSpacer(1)
         self.infoBox.Add(buttonBox, 0, wx.EXPAND)
@@ -417,6 +430,7 @@ class Script():
         self.console = Console(None, "Console", self.log)
         self.ScriptLog("-----Welcome to The DERP Installer!-----")
         self.subprocessRunning = False
+        self.isDownloading = False
         self.processLog = ""
         self.expectString = ""
         self.updatedTools = False
@@ -531,7 +545,7 @@ class Script():
             self.frame.connectionText.SetLabel("ADB connection detected.  Device serial #: " + text)
             self.frame.connectionText.SetOwnForegroundColour("green")
             try:
-                if self.subprocessRunning:
+                if self.subprocessRunning or self.isDownloading:
                     self.console.adbText.Disable()
                     self.console.adbLabel.SetOwnForegroundColour("black")
                 else:
@@ -543,7 +557,7 @@ class Script():
             self.frame.connectionText.SetLabel("Fastboot connection detected: Device serial #" + text)
             self.frame.connectionText.SetOwnForegroundColour("blue")
             try:
-                if self.subprocessRunning:
+                if self.subprocessRunning or self.isDownloading:
                     self.console.fbText.Disable()
                     self.console.fbLabel.SetOwnForegroundColour("black")
                 else:
@@ -683,6 +697,8 @@ class Script():
         self.frame.FAQItem.Enable(False)
         self.frame.tutorialItem.Enable(False)
         self.frame.activityBar.Show(True)
+        self.frame.progressBar.Show(True)
+        self.frame.infoText.SetLabel(" ".join(args))
         self.frame.Layout()
         self.subProcessThread = SubProcessThread(args, downloadsFolder,
                                 self.frame)
@@ -693,7 +709,7 @@ class Script():
 
         """ Note-- if this is doing an updatetools, it will look for the
         "Accept License" message from the SDK updater and present it
-        to the user to accept.  On non-updatetools funcitonality, all that
+        to the user to accept.  On non-updatetools functionality, all that
         should be skipped """
         licenseText = ""
         while self.subprocessRunning:
@@ -726,6 +742,8 @@ class Script():
                         if "Do you accept the license " in stdoutString:
                             if self.frame.AcceptLicense(licenseText):
                                 self.ScriptLog("SDK License accepted.  Standby...")
+                                self.frame.infoText.SetLabel("THE INTERFACE MAY PAUSE.  Please be patient while tools are updated.")
+                                self.frame.infoText.Update()
                                 self.subProcessThread.p.communicate("yes\n")
                             else:
                                 self.ScriptLog("SDK License rejected.  Quitting " + app_name + " now.")
@@ -748,6 +766,7 @@ class Script():
 
     def EndSubProcess(self, e):
         self.frame.activityBar.Hide()
+        self.frame.progressBar.Hide()
         self.frame.nextBtn.Enable()
         self.frame.FAQItem.Enable(True)
         self.frame.tutorialItem.Enable(True)
@@ -840,7 +859,17 @@ class Script():
         command = [os.path.join(toolsFolder, androidSdk[3], "platform-tools", "fastboot")]
         self.DoSubProcess(command + scriptArgs)
 
+    def UpdateDownloadActivityBar(self, blockCount, blockSize, totalSize):
+        if totalSize != -1:  # that is, ftp with unspecified size
+            self.frame.activityBar.SetRange(totalSize)
+            self.frame.activityBar.SetValue(blockCount * blockSize)
+        else:
+            self.frame.activityBar.Pulse()
+        wx.Yield()
+
     def UpdateTools(self):
+
+        import urllib
 
         self.ScriptLog("ACTION  : Updating SDK Tools...")
         self.ScriptLog(" " * 10 + "Checking for SDK...")
@@ -849,8 +878,24 @@ class Script():
                              os.X_OK):
             self.ScriptLog("Try #" + str(attempt) + 
                            ":  Trying to install tools.")
-            self.DoSubProcess(["curl", "-sLo" + os.path.join(toolsFolder, androidSdk[1]),
-                                os.path.join(androidSdk[0], androidSdk[1])])
+            self.frame.infoText.SetLabel("Downloading required tools.  Standby...")
+            self.frame.activityBar.Show(True)
+            self.frame.progressBar.Show(True)
+            self.frame.Layout()
+            try:
+                self.isDownloading = True
+                self.ScriptLog("Downloading tools...")
+                urllib.urlretrieve(os.path.join(androidSdk[0], androidSdk[1]),
+                                   os.path.join(toolsFolder, androidSdk[1]),
+                                   reporthook=self.UpdateDownloadActivityBar)
+                self.ScriptLog("Download finished.")
+            except:
+                self.frame.infoText.SetLabel("Download error!")
+                self.ScriptLog("Download error: " + str(sys.exc_info()[0]))
+            self.isDownloading = False
+            self.frame.activityBar.Hide()
+            self.frame.progressBar.Hide()
+            self.frame.Layout()
             if self.VerifyHash(os.path.join(toolsFolder, androidSdk[1]), androidSdk[2], "sha512"):
                 self.DoSubProcess(["tar", "-C" + toolsFolder, "-xvf" + 
                                    os.path.join(toolsFolder, androidSdk[1])])
@@ -884,6 +929,8 @@ class Script():
             self.DoADB(["start-server"], True)
             self.updatedTools = True
             self.frame.openItem.Enable(True)
+            self.frame.FAQItem.Enable(True)
+            self.frame.tutorialItem.Enable(True)
             self.checkConnectionThread = CheckConnectionThread(
                 os.path.join(toolsFolder, androidSdk[3], "platform-tools"), self.frame)
 
@@ -918,6 +965,7 @@ class Script():
             return False
 
     def GetFile(self, filetag):
+
         success = False
         self.frame.nextBtn.Disable()
         # check hash first, just in case the file is already there.
@@ -946,11 +994,33 @@ class Script():
                            theHash, algorithm):
             success = True
         else:
+            import urllib
             attempt = 1
             while attempt < 5:
-                self.DoSubProcess(["curl", "-sLo" + os.path.join(downloadsFolder,
-                                   filetag.get("local_name")),
-                                   filetag.get("url")])
+                self.frame.FAQItem.Enable(False)
+                self.frame.tutorialItem.Enable(False)
+                self.frame.fileMenu.Enable(wx.ID_OPEN, False)
+                self.frame.infoText.SetLabel("Downloading " + filetag.get("url") + " to " + filetag.get("local_name"))
+                self.frame.activityBar.Show(True)
+                self.frame.progressBar.Show(True)
+                self.frame.Layout()
+                self.ScriptLog("Downloading " + filetag.get("url") + " to " + filetag.get("local_name"))
+                try:
+                    self.isDownloading = True
+                    urllib.urlretrieve(filetag.get("url"),
+                                       os.path.join(downloadsFolder, filetag.get("local_name")),
+                                       reporthook=self.UpdateDownloadActivityBar)
+                    self.ScriptLog("Download completed.")
+                except:
+                    self.frame.infoText.SetLabel("Download error!")
+                    self.ScriptLog("Download ERROR: " + str(sys.exc_info()[0]))
+                self.isDownloading = False
+                self.frame.FAQItem.Enable(True)
+                self.frame.tutorialItem.Enable(True)
+                self.frame.fileMenu.Enable(wx.ID_OPEN, True)
+                self.frame.activityBar.Hide()
+                self.frame.progressBar.Hide()
+                self.frame.Layout()
                 attempt += 1
                 if self.VerifyHash(os.path.join(downloadsFolder, filetag.get("local_name")),
                                   theHash, algorithm):
