@@ -743,7 +743,7 @@ class Script():
                         if "Do you accept the license " in stdoutString:
                             if self.frame.AcceptLicense(licenseText):
                                 self.ScriptLog("SDK License accepted.  Standby...")
-                                self.frame.infoText.SetLabel("THE INTERFACE MAY PAUSE.  Please be patient while tools are updated.")
+                                self.frame.infoText.SetLabel("Please be patient while tools are updated.")
                                 self.frame.infoText.Update()
                                 self.subProcessThread.p.stdin.write("yes\n")
                             else:
