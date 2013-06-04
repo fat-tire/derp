@@ -729,7 +729,8 @@ class Script():
                         while self.subprocessRunning == True:
                             wx.Yield()
                             char = self.subProcessThread.p.stdout.read(1)
-                            if char != "\n" and stdoutString[-7:] != " [y/n]:":
+                            if char != "\n" and stdoutString[-7:] != " [y/n]:" \
+                                            and stdoutString[-6:] != " left)":
                                 stdoutString = stdoutString + char;
                             else:
                                 self.processLog = self.processLog + stdoutString
@@ -744,7 +745,7 @@ class Script():
                                 self.ScriptLog("SDK License accepted.  Standby...")
                                 self.frame.infoText.SetLabel("THE INTERFACE MAY PAUSE.  Please be patient while tools are updated.")
                                 self.frame.infoText.Update()
-                                self.subProcessThread.p.communicate("yes\n")
+                                self.subProcessThread.p.stdin.write("yes\n")
                             else:
                                 self.ScriptLog("SDK License rejected.  Quitting " + app_name + " now.")
                                 sys.exit()
@@ -882,6 +883,7 @@ class Script():
             self.frame.activityBar.Show(True)
             self.frame.progressBar.Show(True)
             self.frame.Layout()
+            self.frame.nextBtn.Disable()
             try:
                 self.isDownloading = True
                 self.ScriptLog("Downloading tools...")
@@ -893,6 +895,7 @@ class Script():
                 self.frame.infoText.SetLabel("Download error!")
                 self.ScriptLog("Download error: " + str(sys.exc_info()[0]))
             self.isDownloading = False
+            self.frame.nextBtn.Enable()
             self.frame.activityBar.Hide()
             self.frame.progressBar.Hide()
             self.frame.Layout()
