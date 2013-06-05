@@ -721,7 +721,7 @@ class Script():
                                  [], [], 0.0)[0]:
                     if self.updatedTools == True:
                         stdoutString = self.subProcessThread.p.stdout.readline()
-                        self.ScriptLog("SUBPROCESS: " + stdoutString.rstrip('\n'))
+                        self.ScriptLog("^^  OUTPUT : " + stdoutString.rstrip('\n'))
                     else:
                     # the following is an "enhanced" readline() which will
                     # identify the license agreement line so everything doesn't stop.
@@ -734,7 +734,7 @@ class Script():
                                 stdoutString = stdoutString + char;
                             else:
                                 self.processLog = self.processLog + stdoutString
-                                self.ScriptLog("SUBPROCESS : " + stdoutString.rstrip('\n'))
+                                self.ScriptLog("^^  OUTPUT : " + stdoutString.rstrip('\n'))
                                 break
                     if self.updatedTools == False:
                         if stdoutString[:11] == "License id:":
@@ -759,7 +759,7 @@ class Script():
                          [], [], 0.0)[0]:
                 stdoutString = self.subProcessThread.p.stdout.read()
                 for line in stdoutString.split("\n"):
-                    self.ScriptLog("SUBPROCESS: " + line.rstrip())
+                    self.ScriptLog("^^  OUTPUT : " + line.rstrip())
                 self.processLog = self.processLog + line + "\n"
         except:
             pass
@@ -792,7 +792,7 @@ class Script():
                 self.ScriptLog("Expected action output string was found.")
 
     def DoSubProcess(self, args):
-        self.ScriptLog(("DEBUG MODE [" if self.debug else "ACTION  : [") + ' '.join(args) + "]")
+        self.ScriptLog(("DEBUG MODE [" if self.debug else "ACTION     : [") + ' '.join(args) + "]")
         if not self.debug:
             self.StartSubProcess(args)
 
@@ -872,7 +872,7 @@ class Script():
 
         import urllib
 
-        self.ScriptLog("ACTION  : Updating SDK Tools...")
+        self.ScriptLog("ACTION     : Updating SDK Tools...")
         self.ScriptLog(" " * 10 + "Checking for SDK...")
         attempt = 1
         while not os.access(os.path.join(toolsFolder, androidSdk[3], "tools", "android"),
@@ -916,8 +916,8 @@ class Script():
                         myzip.extractall(toolsFolder)
                         # for some reason permission not set on mac
                         os.chmod(os.path.join(toolsFolder, androidSdk[3], "tools", "android"),
-                             os.stat(os.path.join(toolsFolder, androidSdk[3], "tools", "android")).st_mode \
-                             | stat.S_IXUSR)
+                            os.stat(os.path.join(toolsFolder, androidSdk[3],
+                            "tools", "android")).st_mode | stat.S_IXUSR)
                     except:
                         self.ScriptLog("Unexpected error unzipping file.")
                 self.ScriptLog("Done extracting tools!")
@@ -941,10 +941,10 @@ class Script():
                     self.ScriptLog("(Next time, try running DERP with DEBUG MODE turned off.)")
                 break
         else:
-            self.ScriptLog("Previous SDK found.  No need to get it again!")
+            self.ScriptLog("SDK found.  No need to get it again!")
 
         if os.access(os.path.join(toolsFolder, androidSdk[3], "tools", "android"), os.X_OK):
-            import stat
+            from stat import S_IWUSR, S_IWGRP, S_IWOTH
             self.DoSubProcess([os.path.join(toolsFolder, androidSdk[3], "tools", "android"), \
                             "update", "sdk", \
                             "--no-ui", "--filter", "platform-tool, tool"])
@@ -953,16 +953,16 @@ class Script():
             # Make everything in tools/downloads world read-only so users can't change it.
             for dirpath, dirs, files in os.walk(toolsFolder):
                 for afile in files:
-                    thing=os.path.join(dirpath, afile)
-                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWUSR)
-                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWGRP)
-                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWOTH)
+                    thing = os.path.join(dirpath, afile)
+                    os.chmod(thing, os.stat(thing).st_mode & ~S_IWUSR)
+                    os.chmod(thing, os.stat(thing).st_mode & ~S_IWGRP)
+                    os.chmod(thing, os.stat(thing).st_mode & ~S_IWOTH)
             for dirpath, dirs, files in os.walk(downloadsFolder):
                 for afile in files:
-                    thing=os.path.join(dirpath, afile)
-                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWUSR)
-                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWGRP)
-                    os.chmod(thing, os.stat(thing).st_mode & ~stat.S_IWOTH)
+                    thing = os.path.join(dirpath, afile)
+                    os.chmod(thing, os.stat(thing).st_mode & ~S_IWUSR)
+                    os.chmod(thing, os.stat(thing).st_mode & ~S_IWGRP)
+                    os.chmod(thing, os.stat(thing).st_mode & ~S_IWOTH)
             self.DoADB(["kill-server"], True)
             self.DoADB(["start-server"], True)
             self.updatedTools = True
