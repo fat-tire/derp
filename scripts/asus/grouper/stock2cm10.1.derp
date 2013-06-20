@@ -104,7 +104,7 @@
 		</info>
 		</step>
 		<step name="Reboot">
-		<info>Now that the recovery has been flashed, you need to <font color="blue">manually re-"Start"</font> by pressing the power button.  Then select <b>Continue</b> below when you are done.</info>
+		<info>Now that the recovery has been flashed, you need to <font color="blue">manually re-"Start"</font> by pressing the power button.</info>
 		<info>The device should then reboot into the clockwork recovery.
 		<p/>
 		When it's fully rebooted into the recovery mode, ensure the device is still connected to the computer, and press <b>Continue</b> below.
