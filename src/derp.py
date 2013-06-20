@@ -148,8 +148,8 @@ class CheckConnectionThread(Thread):
         wx.PostEvent(self.notifyclass, ConnectionUpdatedEvt(status, text))
 
     def bigloop(self):
-        adb_output = self.doSubprocess([os.path.join(self.cwd, "adb"), "get-state"])
-        if "device" or "recovery" in adb_output:
+        adb_output = self.doSubprocess([os.path.join(self.cwd, "adb"), "devices"])
+        if (adb_output.count("\tdevice") == 1) or (adb_output.count("\trecovery") == 1):
             self.sendUpdateEvent(ADB_CONNECTED, self.doSubprocess([os.path.join(self.cwd, "adb"), "get-serialno"]))
         elif "fastboot" in self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]):
             fastboot_out = self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]).split("\t")
@@ -532,7 +532,7 @@ class Script():
         status = e.status
         text = e.text
         if status == NO_CONNECTION:
-            self.frame.connectionText.SetLabel("USB:  Unique device not detected")
+            self.frame.connectionText.SetLabel("USB:  Unique device connection not detected")
             self.frame.connectionText.SetOwnForegroundColour("black")
             try:
                 self.console.adbText.Disable()
