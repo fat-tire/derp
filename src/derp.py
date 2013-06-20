@@ -149,7 +149,7 @@ class CheckConnectionThread(Thread):
 
     def bigloop(self):
         adb_output = self.doSubprocess([os.path.join(self.cwd, "adb"), "get-state"])
-        if "device" in adb_output:
+        if "device" or "recovery" in adb_output:
             self.sendUpdateEvent(ADB_CONNECTED, self.doSubprocess([os.path.join(self.cwd, "adb"), "get-serialno"]))
         elif "fastboot" in self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]):
             fastboot_out = self.doSubprocess([os.path.join(self.cwd, "fastboot"), "devices"]).split("\t")
