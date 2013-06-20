@@ -394,11 +394,16 @@ class MainWindow (wx.Frame):
                             "Android mobile devices (and more).")
         info.SetVersion(app_version)
         info.AddDeveloper('fattire (twitter: @fat__tire)')
+        info.AddDeveloper('Alpha Testers: utkanos, ciwrl, jeagoss, verygreen, hashcode, kornyone, and cowmix!')
         info.SetCopyright('(C) 2013 The developers of this program')
-        info.SetLicence('Derp itself (this program) is open source and licensed under the The GNU Public License, Version 3,\n' + 
+        info.SetLicence('Derp itself (this program) is open source and licensed under the The GNU Public License, Version 3,\n' +
                         "which is viewable from the menu bar (View->License).\n\n" \
                         "Note that the Android SDK and other command-line tools used by derp are licensed\n " + \
                         "and downloaded separately, and by installing/using you must also agree to their terms.")
+        try:
+            info.SetIcon(wx.Icon(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'res', 'drawables', 'derp.png'), wx.BITMAP_TYPE_PNG))
+        except:
+            pass
         wx.AboutBox(info)
 
     def OnOpen(self, event):
