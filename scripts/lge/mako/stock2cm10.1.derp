@@ -8,6 +8,8 @@
 			The Nexus 4 (''mako'') is the fourth Nexus phone manufactured by LG in cooperation with Google.<p/>
 			This installer will assist you in replacing the Nexus 4's built-in "stock" Android with CyanogenMod.
 <p/>
+BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTENT OF YOUR PHONE.
+<p/>
 <b>Note: DISCLAIMER</b>
 <i>Modifying or replacing your device's software may void your device's warranty, lead to data loss, hair loss, financial loss, privacy loss, security breaches, or other damage, and therefore must be done entirely at your own risk. No one affiliated with the CyanogenMod  project or this installation program is responsible for your actions. Good luck!</i>
 <br/><img src="http://wiki.cyanogenmod.org/images/1/15/Cid-wink.png" align="bottom"/><img HEIGHT="100" WIDTH="50" ALIGN="bottom"
@@ -103,18 +105,15 @@
 		<info>The recovery image is being installed to the device.<p/>When it's done, the <b>Continue</b> button below will become enabled.
 		</info>
 		</step>
-		<step name="Reboot">
-		<info>Now that the recovery has been flashed, you need to <font color="blue">manually re-"Start"</font> by pressing the power button.</info>
-		<info>The device should then reboot into the clockwork recovery.
-		<p/>
-		When it's fully rebooted into the recovery mode, ensure the device is still connected to the computer, and press <b>Continue</b> below.
-		</info>
-		<action type="adb"><arg>kill-server</arg></action>
-		<action type="adb"><arg>start-server</arg></action>
-		<action type="adb"><arg>reboot</arg><arg>recovery</arg></action>
-		</step>
-	</section>
-
+        <step name="Reboot Into Recovery">
+                <info>Now that the recovery has been flashed, you need to do a MANUAL STEP.
+                <p/>Use the arrow keys to select the <font color="blue">"Recovery Mode"</font> and then press the power button.</info>
+                <info>The device should then reboot into the clockwork recovery.
+                <p/>
+                When it's fully rebooted into the recovery mode (and NOT before!), ensure the device is still connected to the computer, and press <b>Continue</b> below.
+                </info>
+                </step>
+        </section>
 	<section name="Install CyanogenMod">
 		<step name="The Final Steps!">
 		<info>CyanogenMod is now being pushed to the phone from your computer.  When it's done, the phone will shut off,
