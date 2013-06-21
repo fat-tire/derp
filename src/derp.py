@@ -892,10 +892,11 @@ class Script():
             try:
                 self.isDownloading = True
                 self.ScriptLog("Downloading tools...")
-                urllib.urlretrieve(os.path.join(androidSdk[0], androidSdk[1]),
+                if not self.debug:
+                    urllib.urlretrieve(os.path.join(androidSdk[0], androidSdk[1]),
                                    os.path.join(toolsFolder, androidSdk[1]),
                                    reporthook=self.UpdateDownloadActivityBar)
-                self.ScriptLog("Download finished.")
+                    self.ScriptLog("Download finished.")
             except:
                 self.frame.infoText.SetLabel("Download error!")
                 self.ScriptLog("Download error: " + str(sys.exc_info()[0]))
@@ -1039,7 +1040,7 @@ class Script():
         else:
             import urllib
             attempt = 1
-            while attempt < 5:
+            while attempt < 5 and not self.debug:
                 self.frame.FAQItem.Enable(False)
                 self.frame.tutorialItem.Enable(False)
                 self.frame.fileMenu.Enable(wx.ID_OPEN, False)
@@ -1079,6 +1080,8 @@ class Script():
                         "from here.  You may want to " + 
                         "check the installation script as well as your " + 
                         "Internet connection to see what the deal is.")
+            if self.debug:
+                   self.ScriptLog("DEBUG MODE:  So not downloading.")
         self.frame.nextBtn.Enable()
         self.frame.nextBtn.SetFocus()
         return success
