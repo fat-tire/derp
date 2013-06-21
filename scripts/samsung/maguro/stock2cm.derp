@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<derp device_codename="maguro" os="Linux Darwin" device_name="Galaxy Nexus GSM" device_vendor="samsung" app_version="0.001" script_version=".1" author = "cowmix" author_email="mmarch@gmail.com" author_twitter="@cowmix" title="CM10.1-RC5 for Mako" license="GPLv3">
+<derp device_codename="maguro" os="Linux Darwin" device_name="Galaxy Nexus GSM" device_vendor="samsung" app_version="0.001" script_version=".1" author = "cowmix" author_email="mmarch@gmail.com" author_twitter="@cowmix" title="CM10.1-RC5 for Maguro" license="GPLv3">
   
 	<section name="Introduction">
 		<step name="The Galaxy Nexus">
