@@ -1185,6 +1185,17 @@ class DerpApp(wx.App):
                    "administrative password."
             wx.MessageBox(bye, "Root Required", wx.OK)
             sys.exit(0)
+        testarch = os.uname()
+        if testarch[4] not in ["x86_64", "i386", "i686", "i686-64"]:
+            bye = "Unfortunately, the tools required by derp are only " + \
+                  "currently made available for x86_64 and i386 " + \
+                  "processors.  Although unofficial versions may exist " + \
+                  "for CPUs such as ARM, they are not yet official, " + \
+                  "therefore will not be downloaded by derp.  Try again " + \
+                  "on a machine using an officially-supported " + \
+                  "architecture/CPU type."
+            wx.MessageBox(bye, "Unsupported Architecture", wx.OK)
+            sys.exit(0)
         Script()
 
     def MacReopenApp(self):
