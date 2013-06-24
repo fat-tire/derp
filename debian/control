@@ -2,13 +2,13 @@ Source: derp
 Section: python
 Priority: extra
 Maintainer: fattire <f4ttire@gmail.com>
-Build-Depends: debhelper (>= 8.0.0), python-all(>=2.6.6-3~), fakeroot, gksu, sun-java6-jdk | sun-java7-jdk | openjdk-7-jdk | openjdk-6-jdk
+Build-Depends: make, build-essential, devscripts, python-wxgtk2.8, debhelper (>= 8.0.0), python-all(>=2.6.6-3~), fakeroot, gksu, sun-java6-jdk | sun-java7-jdk | openjdk-7-jdk | openjdk-6-jdk
 Standards-Version: 3.9.3
 Homepage: 
 
 Package: derp
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, python-wxgtk2.8
+Depends: ${python:Depends}, ${misc:Depends}, python-wxgtk2.8, sun-java6-jdk | sun-java7-jdk | openjdk-7-jdk | openjdk-6-jdk
 Description: Device Environment Replacement Program.  A cross-platform,
  scriptable installer for mobile and handheld devices.  derp (the device
  environment replacement program) is intended to be used for simplifying
