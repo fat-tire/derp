@@ -8,7 +8,7 @@ Homepage:
 
 Package: derp
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, python-wxgtk2.8, curl
+Depends: ${python:Depends}, ${misc:Depends}, python-wxgtk2.8
 Description: Device Environment Replacement Program.  A cross-platform,
  scriptable installer for mobile and handheld devices.  derp (the device
  environment replacement program) is intended to be used for simplifying
