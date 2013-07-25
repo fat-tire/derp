@@ -2,11 +2,12 @@
 <derp device_codename="grouper" os="Linux Darwin" device_name="Nexus 7" device_vendor="grouper" app_version="0.001" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" title="CM 10.1.2 for grouper" license="GPLv3">
 	
 	<section name="Introduction">
-		<step name="The Nexus 7 (non-GSM)">
+		<step name="The 2012 Nexus 7 (non-GSM)">
 			<info>
 <font size="+4">Plug your device into your computer via USB cable now.  Make sure you have adequate storage space on your computer (say, 2 GB to be safe).</font><p/>
-			The Nexus 7 (''grouper'') is the first Nexus tablet manufactured by Asus in cooperation with Google.<p/>
-			This installer will assist you in replacing the Nexus 7's built-in "stock" Android with CyanogenMod.
+			The original Nexus 7 (''grouper'') was the first Nexus tablet manufactured by Asus in cooperation with Google.
+ It was introduced in June, 2012 and should not be confused with newer Nexus 7 models.<p/>
+			This installer will assist you in replacing the original Nexus 7's built-in "stock" Android with CyanogenMod.
 <p/>
 BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTENT OF YOUR PHONE.
 <p/>
