@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<derp device_codename="m7att" os="Linux Darwin" device_name="HTC One" device_vendor="htc" app_version="0.001" script_version=".5" author = "cowmix" author_email="mmarch@gmail.com" author_twitter="@cowmix" title="CM10.1 for HTC One" license="GPLv3">
+<derp device_codename="m7att" os="Linux Darwin" device_name="HTC One" device_vendor="htc" app_version="0.001" script_version=".5" author = "cowmix" author_email="mmarch@gmail.com" author_twitter="@cowmix" title="CM 10.1 for HTC One" license="GPLv3">
 
   <section name="Introduction">
 		<step name="The HTC One (AT&amp;T)">
