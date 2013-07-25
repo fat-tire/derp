@@ -19,12 +19,12 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://get.cm/get/jenkins/30531/cm-10.1.0-RC5-maguro.zip"
-                        sha512="9f2860ec756b3264f89c01cc479e3dc50d857a2afeae7d503adbcdc6ab0b9308f1a37aa15a23d2797a1863249b1dbd82645be1926a538ba0f5f41cd6d9214111"
-                        local_name="cm-10.1.0-RC5-maguro.zip"/>
+                <file   url="http://get.cm/get/jenkins/34260/cm-10.1.2-maguro.zip"
+                        sha512="346bcf8b090924a593b41d69e0254cd5c01d9779625479d0bbf86e31d0f4ffe03888a58d2ca7baaac3afe6d70b50a48e98138b2863da4986cd9ca0de164b0c0e"
+                        local_name="cm-10.1.2-maguro.zip"/>
                 <file   local_name="recovery.img"
-                        url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-6.0.1.5-maguro.img"
-                        md5="3edfd5c8da7341c0aef581ed9436e84b"/>
+                        url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.3.4-maguro.img"
+                        sha512="332755bc6f28a705f89602143ab18ce82ff9de829ec162e83c2c8439f51d33f5997268720899aa61a5ae9ccbd7beb6bd3363e70cc69a9e29779a8902fa1a1718"/>
                 <info>Standby.  Downloading all the files needed.<p/>If there is a problem, you'll be informed.  Otherwise, when the downloads are finished, <b>Continue</b>
                       will be enabled below.</info>
                 </step>
@@ -135,7 +135,7 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1.0-RC5-maguro.zip</arg>
+				<arg>cm-10.1.2-maguro.zip</arg>
 				<arg>/sdcard/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -152,7 +152,7 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
-			<arg>echo "--update_package=/sdcard/derp/cm-10.1.0-RC5-maguro.zip" >> /cache/recovery/command</arg>
+			<arg>echo "--update_package=/sdcard/derp/cm-10.1.2-maguro.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">

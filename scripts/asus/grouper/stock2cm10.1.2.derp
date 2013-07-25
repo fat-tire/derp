@@ -20,9 +20,9 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://get.cm/get/jenkins/29764/cm-10.1.0-RC4-grouper.zip"
-                        sha512="4707c43b88170ddd53d0b18f83533d68702a09976369b69aeaff7e0dee4c0227afc962b7442742c9918a8c93abaa91f118b7b16b2a2440b53f4334aa1be8a76b"
-                        local_name="cm-10.1.0-RC4-grouper.zip"/>
+                <file   url="http://get.cm/get/jenkins/34257/cm-10.1.2-grouper.zip"
+                        sha512="3b8e603d082d16b33ad02ec4679207a009760e0793742c79bdeb8a7b8abab72baaf5bdcae41259442dac5b85f722e5904223006317c1cf5d9290c45482075463"
+                        local_name="cm-10.1.2-grouper.zip"/>
                 <file   local_name="recovery.img"
                         url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.3.1-grouper.img"
                         md5="e74c6a250d1ad40c4aae2875a49b0311"/>
@@ -136,7 +136,7 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1.0-RC4-grouper.zip</arg>
+				<arg>cm-10.1.2-grouper.zip</arg>
 				<arg>/data/media/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -149,7 +149,7 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
- 			<arg>echo "--update_package=/data/media/derp/cm-10.1.0-RC4-grouper.zip" >> /cache/recovery/command</arg>
+ 			<arg>echo "--update_package=/data/media/derp/cm-10.1.2-grouper.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">

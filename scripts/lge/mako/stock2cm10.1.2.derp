@@ -20,12 +20,12 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://get.cm/get/jenkins/29767/cm-10.1.0-RC4-mako.zip"
-                        sha512="56c81009a510a5a550b0ce07c49e7baaeff7b1fd765f925eff45059688fce422e6e2fdc691cedf01ddf2a3e0dd6ff8f6e75245e723d6d7e1856f4cca8fefe008"
-                        local_name="cm-10.1.0-RC4-mako.zip"/>
+                <file   url="http://get.cm/get/jenkins/34261/cm-10.1.2-mako.zip"
+                        sha512="cf1d855e8ef20b856906fa82f3e70b174706eac4ffb0092412865088d002b7ff6c2f1ae01a5d255341d9ded7cdd441471b2ff436f139849ae62c509b9b2a6ed2"
+                        local_name="cm-10.1.2-mako.zip"/>
                 <file   local_name="recovery.img"
-                        url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.3.1-mako.img"
-                        md5="28156448103f241d80fb517b03144389"/>
+                        url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.3.4-mako.img"
+                        sha512="39937442dc2de5d57f6319622c4cd4a6b97405c101b0641f767602b3ca14ddd1e065ef4f5d71b7af16266f17a82afa380dd2f8b5c6ca0bf7a42e049c918341d9"/>
                 <info>Standby.  Downloading all the files needed.<p/>If there is a problem, you'll be informed.  Otherwise, when the downloads are finished, <b>Continue</b>
                       will be enabled below.</info>
                 </step>
@@ -136,7 +136,7 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1.0-RC4-mako.zip</arg>
+				<arg>cm-10.1.2-mako.zip</arg>
 				<arg>/data/media/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -149,7 +149,7 @@ BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTE
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
-			<arg>echo "--update_package=/data/media/derp/cm-10.1.0-RC4-mako.zip" >> /cache/recovery/command</arg>
+			<arg>echo "--update_package=/data/media/derp/cm-10.1.2-mako.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">

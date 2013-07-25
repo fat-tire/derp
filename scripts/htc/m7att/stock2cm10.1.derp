@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
-<derp device_codename="m7" os="Linux Darwin" device_name="HTC One" device_vendor="htc" app_version="0.001" script_version=".5" author = "cowmix" author_email="mmarch@gmail.com" author_twitter="@cowmix" title="CM10.1 for HTC One" license="GPLv3">
+<derp device_codename="m7att" os="Linux Darwin" device_name="HTC One" device_vendor="htc" app_version="0.001" script_version=".5" author = "cowmix" author_email="mmarch@gmail.com" author_twitter="@cowmix" title="CM10.1 for HTC One" license="GPLv3">
 
   <section name="Introduction">
 		<step name="The HTC One (AT&amp;T)">
 			<info>
 <font size="+4">Plug your device into your computer via USB cable now.  Make sure you have adequate storage space on your computer (say, 2 GB to be safe).</font><p/>
-			The HTC One (''m7'') is the flagship HTC phone.  <font color="RED">This is the AT&amp;T version.</font><p/>
+			The HTC One (''m7att'') is the flagship HTC phone.  <font color="RED">This is the AT&amp;T version.</font><p/>
 			This installer will assist you in replacing the One's built-in "stock" Android with CyanogenMod (10.1).
 <p/>
 <b>Note: DISCLAIMER</b>
@@ -17,12 +17,12 @@
 	</section>
         <section name="Download Files">
                 <step name="Get All Files">
-                <file   url="http://get.cm/get/jenkins/29432/cm-10.1-20130529-NIGHTLY-m7.zip"
-                        sha512="94d6a7a99b9f42ca28fb77ec57014885282934c6bb1a83a20b09e7d8f344c4e15388efa6553bd6df59ce2a28251afd5432911a3dab095caf69ab3f0a3ca3b6ae"
-                        local_name="cm-10.1-20130529-NIGHTLY-m7.zip"/>
+                <file   url="http://get.cm/get/jenkins/35687/cm-10.1-20130724-NIGHTLY-m7att.zip"
+                        sha512="b576fae0c7cfa4f555141f837cd76c27f12209287109c01a153eed04048126c5a9a7ced302401113e7f60c676642ad9afe393113cc7ea49b2567f31d23ebd6ce"
+                        local_name="cm-10.1-20130724-NIGHTLY-m7att.zip"/>
                 <file   local_name="recovery.img"
-                        url="https://dl.dropboxusercontent.com/u/4008482/Derp/recovery-clockwork-6.0.3.2-m7.img"
-                        md5="b1e59faf83545478e0c1cb17fecec248"/>
+                        url="http://download2.clockworkmod.com/recoveries/recovery-clockwork-touch-6.0.3.3-m7att.img"
+                        sha512="957e66472afc32e82ce3ecebb5371c1f30c756b3335414c0c796b6e16876e8468265b8e9193bc7f59f65c898f474f67cf15273f49585952a0c37954b53025044"/>
                 <info>Standby.  Downloading all the files needed.<p/>If there is a problem, you'll be informed.  Otherwise, when the downloads are finished, <b>Continue</b>
                       will be enabled below.</info>
                 </step>
@@ -192,7 +192,7 @@ As you did previously, restart the device holding down the volume key and then m
 			</action>
 			<action type="adb" wfd="skip">
 				<arg>push</arg>
-				<arg>cm-10.1-20130529-NIGHTLY-m7.zip</arg>
+				<arg>cm-10.1-20130724-NIGHTLY-m7att.zip</arg>
 				<arg>/data/media/derp/</arg>
 			</action>
 			<action type="adb" wfd="skip">
@@ -205,7 +205,7 @@ As you did previously, restart the device holding down the volume key and then m
 			</action>
 			<action type="adb" wfd="skip">
  			   	<arg>shell</arg>
- 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130529-NIGHTLY-m7.zip" >> /cache/recovery/command</arg>
+ 			<arg>echo "--update_package=/data/media/derp/cm-10.1-20130724-NIGHTLY-m7att.zip" >> /cache/recovery/command</arg>
 			<!-- note:  Should probably do a /data wipe if this is really a new install.  But for testing we won't. -->
 			</action>
 			<action type="adb" wfd="skip">
