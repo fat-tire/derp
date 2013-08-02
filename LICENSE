@@ -7,6 +7,7 @@ GPL, version 3 as reproduced below is copyrighted by the Free Software
 Foundation.  The license covers the Python-language code that comprises
 derp, as well as applicable included installation scripts and documentation.  It does
 not apply to the Python libraries or executable binaries themselves (if included).
+Python is licensed under the terms described at http://docs.python.org/2/license.html
 
 The modified Cid robot image is licensed CC-BY-SA-NC and was originally designed by
 Caio Alves.  The original is also a trademark of CyanogenMod LLC.
