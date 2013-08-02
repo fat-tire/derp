@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
-<derp device_codename="mako" os="Linux Darwin" device_name="Nexus 4" device_vendor="lge" app_version="0.001" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" title="CM 10.1.2 for Mako" license="GPLv3">
+<derp device_codename="mako" os="Linux Darwin" device_name="2012 Nexus 4" device_vendor="lge" app_version="0.001" script_version=".5" author = "fattire" author_email="f4ttire@gmail.com" author_twitter="@fat__tire" title="CM 10.1.2 for Mako" license="GPLv3">
 	
 	<section name="Introduction">
-		<step name="The Nexus 4">
+		<step name="The Nexus 4 (2012)">
 			<info>
 <font size="+4">Plug your device into your computer via USB cable now.  Make sure you have adequate storage space on your computer (say, 2 GB to be safe).</font><p/>
-			The Nexus 4 (''mako'') is the fourth Nexus phone manufactured by LG in cooperation with Google.<p/>
+			The 2012 Nexus 4 (''mako'') is the fourth Nexus phone manufactured by LG in cooperation with Google.  This script is for the model introduced in November, 2012.  A white version of the same model was made available in May, 2013.  Don't confuse this model with any newer versions.<p/>
 			This installer will assist you in replacing the Nexus 4's built-in "stock" Android with CyanogenMod.
 <p/>
 BE AWARE THAT THIS SCRIPT CONTAINS INSTRUCTIONS TO ERASE THE PERSONAL USER CONTENT OF YOUR PHONE.
