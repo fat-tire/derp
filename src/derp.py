@@ -1172,30 +1172,31 @@ class DerpApp(wx.App):
 
     def __init__(self, *args, **kwargs):
         wx.App.__init__(self, *args, **kwargs)
-        if not os.geteuid() == 0 and platform.system() == "Linux":
-            bye = "This program must be run as the Superuser with " + \
-                  "full administration access.\n\n" + \
-                  "From a Terminal, try:\n\n" + \
-                  "sudo python " + \
-                   os.path.dirname(os.path.realpath(__file__)) + \
-                   "/derp.py" + \
-                   "\n\nOr if you installed derp from a package, " + \
-                   "you can try:\n\nsudo derp" + \
-                   "\n\nYou will be prompted to give your " + \
-                   "administrative password."
-            wx.MessageBox(bye, "Root Required", wx.OK)
-            sys.exit(0)
-        testarch = os.uname()
-        if testarch[4] not in ["x86_64", "i386", "i686", "i686-64"]:
-            bye = "Unfortunately, the tools required by derp are only " + \
-                  "currently made available for x86_64 and i386 " + \
-                  "processors.  Although unofficial versions may exist " + \
-                  "for CPUs such as ARM, they are not yet official, " + \
-                  "therefore will not be downloaded by derp.  Try again " + \
-                  "on a machine using an officially-supported " + \
-                  "architecture/CPU type."
-            wx.MessageBox(bye, "Unsupported Architecture", wx.OK)
-            sys.exit(0)
+        if platform.system() == "Linux" or platform.system() == "Darwin":
+            if not os.geteuid() == 0:
+                bye = "This program must be run as the Superuser with " + \
+                      "full administration access.\n\n" + \
+                      "From a Terminal, try:\n\n" + \
+                      "sudo python " + \
+                       os.path.dirname(os.path.realpath(__file__)) + \
+                       "/derp.py" + \
+                       "\n\nOr if you installed derp from a package, " + \
+                       "you can try:\n\nsudo derp" + \
+                       "\n\nYou will be prompted to give your " + \
+                       "administrative password."
+                wx.MessageBox(bye, "Root Required", wx.OK)
+                sys.exit(0)
+            testarch = os.uname()
+            if testarch[4] not in ["x86_64", "i386", "i686", "i686-64"]:
+                bye = "Unfortunately, the tools required by derp are only " + \
+                      "currently made available for x86_64 and i386 " + \
+                      "processors.  Although unofficial versions may exist " + \
+                      "for CPUs such as ARM, they are not yet official, " + \
+                      "therefore will not be downloaded by derp.  Try again " + \
+                      "on a machine using an officially-supported " + \
+                      "architecture/CPU type."
+                wx.MessageBox(bye, "Unsupported Architecture", wx.OK)
+                sys.exit(0)
         Script()
 
     def MacReopenApp(self):
