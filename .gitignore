@@ -6,3 +6,10 @@
 # eclipse stuff
 .project
 .pydevproject
+
+# build stuff
+build/
+dist/
+derp.egg-info/
+bin/derp.py
+
